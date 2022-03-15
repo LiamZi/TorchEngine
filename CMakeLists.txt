@@ -19,3 +19,9 @@ include(${TORCH_CMAKE_MODULE_DIR}/Common.cmake)
 include(${TORCH_CMAKE_MODULE_DIR}/Platform.cmake)
 include(${TORCH_CMAKE_MODULE_DIR}/Compiler.cmake)
 
+set(Torch_BIN_DIR "${TORCH_ROOT_DIR}/Torch_bin/${TORCH_PLATFORM_NAME}")
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+add_subdirectory(${TORCH_ROOT_DIR}/Source/External/Build/CMake ${CMAKE_CURRENT_BINARY_DIR}/External EXCLUDE_FROM_ALL)
+add_subdirectory(${TORCH_ROOT_DIR}/Source/Torch/Build/Cmake ${CMAKE_CURRENT_BINARY_DIR}/Torch)

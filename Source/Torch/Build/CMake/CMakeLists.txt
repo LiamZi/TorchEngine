@@ -1,1 +1,5 @@
 set(TORCH_PROJECT_DIR "${TORCH_ROOT_DIR}/Torch")
+set(TORCH_CORELIB_NAME TorchCore)
+set(TORCH_OUTPUT_DIR "${TORCH_PROJECT_DIR}/lib/${TROCH_PLATFORM_NAME}")
+
+add_subdirectory(Engine)
