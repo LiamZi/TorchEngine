@@ -1,0 +1,1 @@
+set(TORCH_PROJECT_DIR "${TORCH_ROOT_DIR}/Torch")
