@@ -1,0 +1,40 @@
+if(NOT TORCH_PLATFORM_WINDOWS_DESKTOP)
+    return()
+endif()
+
+set(EXE_NAME TorchConfig)
+
+set(TORCHCONFIG_SOURCE_FILES ${TORCH_PROJECT_DIR}/Core/Src/TorchConfig/TorchConfig.cpp)
+
+set(TORCHCONFIG_HEADER_FILES ${TORCH_PROJECT_DIR}/Core/Src/TorchConfig/resource.h)
+
+set(TORCHCONFIG_RESOURCE_FILES 
+    ${TORCH_PROJECT_DIR}/Core/Src/TorchConfig/TorchConfig.rc
+    # ${TORCH_PROJECT_DIR}/Torch_logo.ico
+)
+
+SOURCE_GROUP("Source Files" FILES ${TORCHCONFIG_SOURCE_FILES})
+SOURCE_GROUP("Header Files" FILES ${TORCHCONFIG_HEADER_FILES})
+SOURCE_GROUP("Resource Files" FILES ${TORCHCONFIG_RESOURCE_FILES})
+
+add_executable(${EXE_NAME} WIN32
+    ${TORCHCONFIG_SOURCE_FILES} ${TORCHCONFIG_HEADER_FILES} ${TORCHCONFIG_RESOURCE_FILES}
+    # ${TORCH_PROJECT_DIR}/bin/Torch.cfg
+)
+
+add_dependencies(${EXE_NAME} AllInEngine)
+
+set_target_properties(
+    ${EXE_NAME} PROPERTIES
+    PROJECT_LABEL ${EXE_NAME}
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN ON
+    OUTPUT_NAME ${EXE_NAME}${TORCH_OUTPUT_SUFFIX}
+    FOLDER "Torch/Engine/TorchConfig"
+)
+
+target_link_libraries(${EXE_NAME} PRIVATE ${TORCH_CORELIB_NAME})
+
+IF(MSVC)
+    CREATE_VCPROJ_USERFILE(${EXE_NAME})
+ENDIF()
