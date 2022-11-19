@@ -1,3 +1,3 @@
-!Build/CMake/*
-!Build/CMake/Modules/*
+!/Build/CMake/*
+!/Build/CMake/Modules/*
 /Build
