@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|@TORCH_VS_PLATFORM_NAME@'">
+    <LocalDebuggerCommand>@TORCH_BIN_DIR@/$(TargetFileName)</LocalDebuggerCommand>
+    <LocalDebuggerWorkingDirectory>@TORCH_BIN_DIR@</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|@TORCH_VS_PLATFORM_NAME@'">
+    <LocalDebuggerCommand>@TORCH_BIN_DIR@/$(TargetFileName)</LocalDebuggerCommand>
+    <LocalDebuggerWorkingDirectory>@TORCH_BIN_DIR@</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|@TORCH_VS_PLATFORM_NAME@'">
+    <LocalDebuggerCommand>@TORCH_BIN_DIR@/$(TargetFileName)</LocalDebuggerCommand>
+    <LocalDebuggerWorkingDirectory>@TORCH_BIN_DIR@</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|@TORCH_VS_PLATFORM_NAME@'">
+    <LocalDebuggerCommand>@TORCH_BIN_DIR@/$(TargetFileName)</LocalDebuggerCommand>
+    <LocalDebuggerWorkingDirectory>@TORCH_BIN_DIR@</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>
