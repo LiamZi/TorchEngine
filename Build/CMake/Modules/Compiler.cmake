@@ -429,7 +429,8 @@ FUNCTION(TORCH_ADD_MSVC_PRECOMPILED_HEADER TARGET_NAME PRECOMPILED_HEADER)
 			set_source_files_properties(${file_name} PROPERTIES COMPILE_FLAGS "/FI\"${pch_header}\"")
 		endif()
 	endforeach()
-	list(GET cpp_source_list 0 first_cpp_file)
+	# list(GET cpp_source_list 0 first_cpp_file)
+	
 	set_source_files_properties(${first_cpp_file} PROPERTIES COMPILE_FLAGS "/Yc\"${pch_header}\" /FI\"${pch_header}\""
 		OBJECT_OUTPUTS "${pch_output}")
 	set_target_properties(${TARGET_NAME} PROPERTIES COMPILE_FLAGS "/Yu\"${pch_header}\" /Fp\"${pch_output}\""
