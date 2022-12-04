@@ -11,4 +11,4 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_MINSIZEREL ${TORCH_OUTPUT_DIR})
 
 
 add_subdirectory(Engine)
-
+add_subdirectory(Samples)

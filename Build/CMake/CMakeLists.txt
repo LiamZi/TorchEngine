@@ -34,6 +34,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL ${TORCH_BIN_DIR})
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+message("External $$$ ${TORCH_ROOT_DIR}/External/Build/CMake")
+message("External ### ${CMAKE_CURRENT_BINARY_DIR}/External ")
+
 add_subdirectory(${TORCH_ROOT_DIR}/External/Build/CMake ${CMAKE_CURRENT_BINARY_DIR}/External EXCLUDE_FROM_ALL)
 add_subdirectory(${TORCH_ROOT_DIR}/TML/Build/CMake ${CMAKE_CURRENT_BINARY_DIR}/TML)
 add_subdirectory(${TORCH_ROOT_DIR}/Torch/Build/Cmake ${CMAKE_CURRENT_BINARY_DIR}/Torch)

@@ -1,0 +1,7 @@
+#ifndef __TORCH_SAMPLES_SRC_COMMON_COMMON_HPP__
+#define __TORCH_SAMPLES_SRC_COMMON_COMMON_HPP__
+
+#pragma once
+
+
+#endif

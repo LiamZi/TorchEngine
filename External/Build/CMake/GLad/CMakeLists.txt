@@ -11,3 +11,5 @@ set(GLAD_HEADER_FILES
 
 source_group("Source Files" FILES ${C_FILES})
 source_group("Header FIles" FILES ${GLAD_HEADER_FILES})
+
+add_library(GLad INTERFACE)
