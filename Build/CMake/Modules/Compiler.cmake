@@ -1,7 +1,8 @@
 ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 
 if(MSVC)
-	set(CMAKE_CXX_FLAGS "/std:c++17 /Wall /WX /EHsc /MP /bigobj /Zc:strictStrings /Zc:rvalueCast /Gw")
+	# set(CMAKE_CXX_FLAGS "/std:c++17 /Wall /WX /EHsc /MP /bigobj /Zc:strictStrings /Zc:rvalueCast /Gw")
+	set(CMAKE_CXX_FLAGS "/std:c++17 /Wall /W3 /EHsc /MP /bigobj /Zc:strictStrings /Zc:rvalueCast /Gw")
 
 	if(CMAKE_C_COMPILER_ID MATCHES Clang)
 		set(TORCH_COMPILER_NAME "clangcl")
@@ -63,7 +64,8 @@ if(MSVC)
 			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-suggest-override")
 		endif()
 
-		set(CMAKE_C_FLAGS "/Wall /WX /bigobj /Gw")
+		# set(CMAKE_C_FLAGS "/Wall /WX /bigobj /Gw")
+		set(CMAKE_C_FLAGS "/Wall /W3 /bigobj /Gw")
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-covered-switch-default")
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-documentation")
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-documentation-unknown-command")

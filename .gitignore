@@ -15,6 +15,8 @@
 /Build/vs2022_vc143_win_x64
 /Build/x64
 /Build/CMakeCache.txt
+/Build/TML
+/Build/External
 !/Build/CMake/*
 !/Build/CMake/Modules/*
 Torch/lib/*

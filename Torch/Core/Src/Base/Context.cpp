@@ -1,4 +1,4 @@
-//#include <Torch/Torch.hpp>
+#include <Torch/Torch.hpp>
 
 #include <fstream>
 #include <mutex>
@@ -11,7 +11,6 @@
 #endif
 
 #include <Torch/Context.hpp>
-
 
 namespace Torch
 {

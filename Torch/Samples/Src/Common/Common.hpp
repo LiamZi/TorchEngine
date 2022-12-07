@@ -3,5 +3,10 @@
 
 #pragma once
 
+#ifdef TORCH_EDITOR_CORE_SOURCE
+    #define TORCH_EDITOR_CORE_SOURCE TORCH_SYMBOL_EXPORT
+#else
+    #define TORCH_EDITOR_CORE_SOURCE TORCH_SYMBOL_IMPORT
+#endif
 
 #endif

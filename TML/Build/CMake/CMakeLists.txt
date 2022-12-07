@@ -12,10 +12,14 @@ set(LIB_NAME TML)
 
 set(BASE_HEADER_FILES
     ${TML_PROJECT_DIR}/include/TML/TML.hpp
+	${TML_PROJECT_DIR}/include/TML/Compiler.hpp
+	${TML_PROJECT_DIR}/include/TML/Config.hpp
+	${TML_PROJECT_DIR}/include/TML/Platform.hpp
+	${TML_PROJECT_DIR}/include/TML/Log.hpp
 )
 
 set(BASE_SOURCE_FILES
-
+	${TML_PROJECT_DIR}/src/Log.cpp
 )
 
 SOURCE_GROUP("Base\\Source Files" FILES ${BASE_SOURCE_FILES})
@@ -43,7 +47,8 @@ SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES
 	FOLDER "TML"
 )
 
-TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${KFL_PROJECT_DIR}/include/TML/TML.hpp")
+
+#TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${TML_PROJECT_DIR}/include/TML/TML.hpp")
 
 target_link_libraries(${LIB_NAME}
 	PRIVATE
