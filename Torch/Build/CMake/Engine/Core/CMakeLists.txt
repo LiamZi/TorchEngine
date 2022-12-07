@@ -58,7 +58,7 @@ if(TORCH_PLATFORM_WINDOWS)
 
 endif()
 
-add_definitions(AllInEngine ${LIB_NAME})
+add_dependencies(AllInEngine ${LIB_NAME})
 
 if(TORCH_PLATFORM_WINDOWS_DESKTOP)
     set(rc_lib_name "Torch_RC")
