@@ -36,9 +36,10 @@ set_target_properties(${LIB_NAME} PROPERTIES
                     FOLDER "Torch/Engine/Core")
 
 if(TORCH_PREFERRED_LIB_TYPE STREQUAL "SHARED")
-    set_target_properties(${LIB_NAME} PROPERTIES 
-    CXX_VISIBILITY_PRESET hidden 
-    VISIBILITY_INLINES_HIDDEN ON)
+    set_target_properties(${LIB_NAME} PROPERTIES
+        CXX_VISIBILITY_PRESET hidden
+        VISIBILITY_INLINES_HIDDEN ON
+    )
 endif()
 
 #TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${TORCH_PROJECT_DIR}/Core/Include/Torch/Torch.hpp")

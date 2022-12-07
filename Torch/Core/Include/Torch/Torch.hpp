@@ -18,7 +18,7 @@
 #ifdef TORCH_CORE_SOURCE
     #define TORCH_CORE_API TORCH_SYMBOL_EXPORT
 #else
-    #define TORCH_CORE_API KLAYGE_SYMBOL_IMPORT
+    #define TORCH_CORE_API TORCH_SYMBOL_IMPORT
 #endif
 
 #include <vector>

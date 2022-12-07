@@ -7,7 +7,7 @@
 
 namespace Torch
 {
-    class Context
+    class TORCH_CORE_API Context
     {
     public:
         Context();
