@@ -111,7 +111,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_KLAYGEICON          ICON                    "../../../klayge_logo.ico"
+IDI_TORCHICON          ICON                    "../../../favicon.ico"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
