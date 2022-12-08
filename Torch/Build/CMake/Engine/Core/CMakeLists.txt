@@ -12,7 +12,28 @@ set(BASE_HEADER_FILES
 SOURCE_GROUP("Base\\Source Files" FILES ${BASE_SOURCE_FILES})
 SOURCE_GROUP("Base\\Header Files" FILES ${BASE_HEADER_FILES})
 
-add_library(${LIB_NAME} ${TORCH_PREFERRED_LIB_TYPE} ${BASE_SOURCE_FILES} ${BASE_HEADER_FILES})
+set(APP_SOURCE_FILES 
+    ${TORCH_PROJECT_DIR}/Core/Src/AppPlatform/App3DFramework.cpp
+    ${TORCH_PROJECT_DIR}/Core/Src/AppPlatform/Window.cpp
+)
+
+if(TORCH_PLATFORM_WINDOWS_DESKTOP)
+    set(APP_SOURCE_FILES ${APP_SOURCE_FILES} ${TORCH_PROJECT_DIR}/Core/Src/AppPlatform/WindowWin.cpp)
+endif()
+
+set(APP_HEADER_FILES 
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/App3DFramework.hpp
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Window.hpp
+)
+
+SOURCE_GROUP("AppPlatform\\Source Files" FILES ${APP_SOURCE_FILES})
+SOURCE_GROUP("AppPlatform\\Header Files" FILES ${APP_HEADER_FILES})
+
+add_library(${LIB_NAME} 
+    ${TORCH_PREFERRED_LIB_TYPE} 
+    ${BASE_SOURCE_FILES} ${BASE_HEADER_FILES} 
+    ${APP_SOURCE_FILES} ${APP_HEADER_FILES}
+)
 
 target_compile_definitions(${LIB_NAME}
 	PRIVATE
