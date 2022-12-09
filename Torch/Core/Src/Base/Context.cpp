@@ -64,4 +64,8 @@ namespace Torch
     void Context::Resume()
     {
     }
+
+    void Torch::Context::DestoryAll()
+    {
+    }
 };

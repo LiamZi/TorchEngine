@@ -17,7 +17,7 @@ namespace Torch
     template <typename T, typename... Args>
     inline std::unique_ptr<T> MakeUniquePtrHelper(std::false_type, Args&&... args)
     {
-        return std::make_unique<T(std::forward<Args>(args)...);
+        return std::make_unique<T>(std::forward<Args>(args)...);
     }
 
     template <typename T, typename... Args>
