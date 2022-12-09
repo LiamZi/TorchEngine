@@ -3,10 +3,20 @@
 
 #pragma once
 
-#ifdef TORCH_EDITOR_CORE_SOURCE
-    #define TORCH_EDITOR_CORE_SOURCE TORCH_SYMBOL_EXPORT
-#else
-    #define TORCH_EDITOR_CORE_SOURCE TORCH_SYMBOL_IMPORT
-#endif
+//#ifndef SAMPLE_COMMON_SOURCE
+//#ifdef TORCH_COMPILER_MSVC
+//extern "C"
+//{
+//	TORCH_SYMBOL_EXPORT uint32_t NvOptimusEnablement = 0x00000001;
+//}
+//#endif
+//#endif
+
+int SampleMain();
+
+inline int EntryFunc()
+{
+    return SampleMain();
+}
 
 #endif

@@ -36,6 +36,7 @@ namespace Torch
         bool _active;
         bool _ready;
         bool _closed;
+        bool _keep_Screen_on;
         float _dpi_scale;
         float _effective_dpi_scale;
         WindowRotation _win_Roation;
@@ -55,6 +56,26 @@ namespace Torch
     public:
         Window(std::string const &name, void* native_wnd);
         ~Window();
+
+        bool isActive() const
+        {
+            return _active;
+        }
+
+        void setActive(bool active)
+        {
+            _active = active;
+        }
+
+        bool isReady() const
+        {
+            return _ready;
+        }
+
+        void setReady(bool ready)
+        {
+            _ready = ready;
+        }
 
     private:
         void UpdateDpiScale(float scale);

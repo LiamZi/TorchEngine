@@ -17,11 +17,13 @@ set(BASE_HEADER_FILES
 	${TML_PROJECT_DIR}/include/TML/Platform.hpp
 	${TML_PROJECT_DIR}/include/TML/Log.hpp
 	${TML_PROJECT_DIR}/include/TML/Util.hpp
+	${TML_PROJECT_DIR}/include/TML/DllLoader.hpp
 )
 
 set(BASE_SOURCE_FILES
 	${TML_PROJECT_DIR}/src/Log.cpp
 	${TML_PROJECT_DIR}/src/Util.cpp
+	${TML_PROJECT_DIR}/src/DllLoader.cpp
 )
 
 SOURCE_GROUP("Base\\Source Files" FILES ${BASE_SOURCE_FILES})

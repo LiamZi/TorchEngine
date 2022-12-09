@@ -57,4 +57,5 @@ macro(SETUP_SAMPLE EXE_NAME)
 endmacro(SETUP_SAMPLE EXE_NAME)
 
 add_subdirectory(Common)
+add_subdirectory(Tutor)
 

@@ -5,6 +5,10 @@
 
 #include <string>
 #include <memory>
+#include <assert.h>
+
+#include <TML/DllLoader.hpp>
+
 
 namespace Torch
 {

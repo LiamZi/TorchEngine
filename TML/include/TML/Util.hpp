@@ -14,6 +14,11 @@
 
 namespace Torch
 {
+
+    std::wstring &Convert(std::wstring &dest, std::wstring_view src);
+
+    std::wstring& Convert(std::wstring& dest, std::string_view src);
+
     template <typename T, typename... Args>
     inline std::unique_ptr<T> MakeUniquePtrHelper(std::false_type, Args&&... args)
     {
