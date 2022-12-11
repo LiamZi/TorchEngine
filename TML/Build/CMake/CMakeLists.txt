@@ -40,6 +40,7 @@ target_compile_definitions(${LIB_NAME}
 
 target_include_directories(${LIB_NAME}
 	PUBLIC
+	glm
 	${TML_PROJECT_DIR}/include
 )
 
@@ -52,9 +53,11 @@ SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES
 )
 
 
-#TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${TML_PROJECT_DIR}/include/TML/TML.hpp")
+# TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${TML_PROJECT_DIR}/include/TML/TML.hpp")
 
 target_link_libraries(${LIB_NAME}
+	PUBLIC
+		glm::glm_shared
 	PRIVATE
 		rapidjson
 )

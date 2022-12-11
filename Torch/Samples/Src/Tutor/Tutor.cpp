@@ -1,5 +1,6 @@
 #include "Tutor.hpp"
 #include "Common.hpp"
+#include <glm/glm.hpp>
 
 int SampleMain()
 {

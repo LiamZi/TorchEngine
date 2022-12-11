@@ -2,6 +2,10 @@
 #define __TML_CONFIG_HPP__
 
 #if !defined(__cplusplus)
+    #error C++ compiler required.
+#endif
+
+#if defined(DEBUG) | defined(_DEBUG)
     #define TORCH_DEBUG
 #endif
 
