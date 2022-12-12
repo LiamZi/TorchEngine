@@ -4,7 +4,7 @@
 #pragma once
 
 #include <Torch/Torch.hpp>
-#include <Torch/App3DFramework.hpp>
+#include <Torch/Interfaces/App3DFramework.hpp>
 
 class Tutor : public Torch::App3DFramework
 {

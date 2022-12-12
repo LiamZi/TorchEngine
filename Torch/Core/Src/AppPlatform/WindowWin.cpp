@@ -2,7 +2,7 @@
 #include <Torch/Torch.hpp>
 #ifdef TORCH_PLATFORM_WINDOWS_DESKTOP
 #include <TML/Util.hpp>
-#include <Torch/Window.hpp>
+#include <Torch/Interfaces/Window.hpp>
 
 #if (_WIN32_WINNT >= _WIN32_WINNT_WINBLUE)
 #include <VersionHelpers.h>
@@ -56,7 +56,7 @@ namespace Torch
     }
 #endif
 
-    Window::Window(std::string const &name, void* native_wnd)
+    Window::Window(std::string const &name, RenderSettings const &setting, void* native_wnd)
     : _active{false}
     , _ready{false}
     , _closed{false}
@@ -64,7 +64,7 @@ namespace Torch
     , _dpi_scale{1}
     , _effective_dpi_scale{1}
     , _win_Roation{WindowRotation::WR_Identity}
-    , _hide{false}
+    , _hide{setting._hide_win}
 
 
     {
@@ -111,7 +111,7 @@ namespace Torch
                 _win_style = WS_OVERLAPPEDWINDOW;
             }
 
-            RECT rect = { 0, 0, static_cast<LONG>(1270 * _dpi_scale + 0.5f), static_cast<LONG>(768 * _dpi_scale + 0.5f)};
+            RECT rect = { 0, 0, static_cast<LONG>(setting._width * _dpi_scale + 0.5f), static_cast<LONG>(setting._height * _dpi_scale + 0.5f)};
             ::AdjustWindowRect(&rect, _win_style, false);
 
             _wnd = ::CreateWindowW(_wname.c_str(), _wname.c_str(), _win_style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, nullptr, nullptr, hInst, nullptr);

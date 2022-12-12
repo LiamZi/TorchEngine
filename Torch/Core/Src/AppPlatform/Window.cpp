@@ -1,7 +1,7 @@
 #include <Torch/Torch.hpp>
-#include <Torch/Context.hpp>
+#include <Torch/Interfaces/Context.hpp>
 
-#include <Torch/Window.hpp>
+#include <Torch/Interfaces/Window.hpp>
 
 
 namespace Torch

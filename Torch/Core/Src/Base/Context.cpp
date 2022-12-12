@@ -11,7 +11,7 @@
 #endif
 #endif
 
-#include <Torch/Context.hpp>
+#include <Torch/Interfaces/Context.hpp>
 
 namespace
 {

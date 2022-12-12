@@ -4,6 +4,7 @@
 #pragma once
 
 #include <Torch/Torch.hpp>
+#include <Torch/Interfaces/RenderSettings.hpp>
 
 #if defined TORCH_PLATFORM_WINDOWS_DESKTOP
 #include <Windows.h>
@@ -54,7 +55,7 @@ namespace Torch
 #endif
 
     public:
-        Window(std::string const &name, void* native_wnd);
+        Window(std::string const &name, RenderSettings const &setting, void* native_wnd);
         ~Window();
 
         bool isActive() const

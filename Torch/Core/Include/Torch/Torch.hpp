@@ -23,6 +23,6 @@
 
 #include <vector>
 #include <string>
-#include <Torch/Context.hpp>
+#include <Torch/Interfaces/Context.hpp>
 
 #endif

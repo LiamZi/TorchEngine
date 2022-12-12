@@ -1,9 +1,9 @@
 #include <Torch/Torch.hpp>
 #include <TML/Util.hpp>
-#include <Torch/Context.hpp>
-#include <Torch/Window.hpp>
+#include <Torch/Interfaces/Context.hpp>
+#include <Torch/Interfaces/Window.hpp>
 #include <assert.h>
-#include <Torch/App3DFramework.hpp>
+#include <Torch/Interfaces/App3DFramework.hpp>
 
 namespace Torch
 {
@@ -50,12 +50,14 @@ namespace Torch
 
     std::shared_ptr<Window> App3DFramework::MakeWindow(std::string const &name)
     {
-        return MakeSharedPtr<Window>(name, nullptr);
+        RenderSettings setting;
+        return MakeSharedPtr<Window>(name, setting, nullptr);
     }
 
     std::shared_ptr<Window> App3DFramework::MakeWindow(std::string const &name, void *native_wnd)
     {
-        return MakeSharedPtr<Window>(name, native_wnd);
+         RenderSettings setting;
+        return MakeSharedPtr<Window>(name, setting, native_wnd);
     }
 
     void App3DFramework::Run()

@@ -5,7 +5,7 @@
 
 #include <Torch/Torch.hpp>
 
-#include <Torch/Window.hpp>
+#include <Torch/Interfaces/Window.hpp>
 
 
 namespace Torch

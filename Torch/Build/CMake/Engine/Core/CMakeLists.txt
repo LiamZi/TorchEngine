@@ -6,11 +6,22 @@ set(BASE_SOURCE_FILES
 
 set(BASE_HEADER_FILES
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Torch.hpp
-    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Context.hpp
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Interfaces/Context.hpp
 )
 
 SOURCE_GROUP("Base\\Source Files" FILES ${BASE_SOURCE_FILES})
 SOURCE_GROUP("Base\\Header Files" FILES ${BASE_HEADER_FILES})
+
+set(RENDERER_SOURCE_FILES
+
+)
+
+set(RENDERER_HEADER_FILES
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Interfaces/RenderSettings.hpp
+)
+
+SOURCE_GROUP("Renderer\\Source Files" FILES ${RENDERER_SOURCE_FILES})
+SOURCE_GROUP("Renderer\\Header Files" FILES ${RENDERER_HEADER_FILES})
 
 set(APP_SOURCE_FILES 
     ${TORCH_PROJECT_DIR}/Core/Src/AppPlatform/App3DFramework.cpp
@@ -22,8 +33,8 @@ if(TORCH_PLATFORM_WINDOWS_DESKTOP)
 endif()
 
 set(APP_HEADER_FILES 
-    ${TORCH_PROJECT_DIR}/Core/Include/Torch/App3DFramework.hpp
-    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Window.hpp
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Interfaces/App3DFramework.hpp
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Interfaces/Window.hpp
 )
 
 SOURCE_GROUP("AppPlatform\\Source Files" FILES ${APP_SOURCE_FILES})
@@ -31,8 +42,10 @@ SOURCE_GROUP("AppPlatform\\Header Files" FILES ${APP_HEADER_FILES})
 
 add_library(${LIB_NAME} 
     ${TORCH_PREFERRED_LIB_TYPE} 
-    ${BASE_SOURCE_FILES} ${BASE_HEADER_FILES} 
+    ${BASE_SOURCE_FILES} ${BASE_HEADER_FILES}
+    ${RENDERER_SOURCE_FILES} ${RENDERER_HEADER_FILES} 
     ${APP_SOURCE_FILES} ${APP_HEADER_FILES}
+
 )
 
 target_compile_definitions(${LIB_NAME}

@@ -1,4 +1,4 @@
-#include "Tutor.hpp"
+﻿#include "Tutor.hpp"
 #include "Common.hpp"
 #include <glm/glm.hpp>
 
@@ -14,4 +14,5 @@ int SampleMain()
 Tutor::Tutor()
     : App3DFramework("Tutor1")
 {
+    glm::vec4(1, 1, 1, 1);
 }
