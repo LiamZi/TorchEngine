@@ -76,7 +76,7 @@ if(TORCH_PREFERRED_LIB_TYPE STREQUAL "SHARED")
     )
 endif()
 
-#TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${TORCH_PROJECT_DIR}/Core/Include/Torch/Torch.hpp")
+TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${TORCH_PROJECT_DIR}/Core/Include/Torch/Torch.hpp")
 
 target_link_libraries(${LIB_NAME} 
     PUBLIC
