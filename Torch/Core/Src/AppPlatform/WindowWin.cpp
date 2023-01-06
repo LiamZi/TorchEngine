@@ -310,7 +310,7 @@ namespace Torch
         DllLoader shcore;
         if(shcore.Load("SHCore.dll"))
         {
-            typedef HRESULT (WINAPI *SetProcessDpiAwarenessFunc)(PROCESS_DPI_AWARENESS vlaue);
+            typedef HRESULT (WINAPI *SetProcessDpiAwarenessFunc)(PROCESS_DPI_AWARENESS value);
             auto *DynamicSetProcessDpiAwareness = reinterpret_cast<SetProcessDpiAwarenessFunc>(shcore.GetProcAddress("SetProcessDpiAwareness"));
 
             DynamicSetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);

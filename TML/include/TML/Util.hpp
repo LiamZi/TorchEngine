@@ -45,6 +45,277 @@ namespace Torch
         return MakeUniquePtrHelper<T>(std::is_array<T>(), std::forward<Args>(args)...);
     }
 
+    template<class T>
+    void UNUSED_PARAM(T const &)
+    {
+    }
+
+    template<typename C, typename T, typename E = void>
+    class ReadOnlyProperty;
+
+    template<typename C, typename T>
+    class ReadOnlyProperty<C, T, typename std::enable_if<std::is_fundamental<T>::value || std::is_same<std::string, T>::value>::type>
+    {
+    public:
+        using Tgetter = T (C::*)() const;
+    private:
+        C *const _object;
+        Tgetter const _getter;
+
+    public:
+       
+        ReadOnlyProperty(C *propObject, Tgetter propGetter)
+        : _object{propObject}
+        , _getter{propGetter}
+        {
+
+        }
+
+        ReadOnlyProperty &operator=(const ReadOnlyProperty &) = delete;
+        ReadOnlyProperty(const ReadOnlyProperty &) = delete;
+
+        operator T() const
+        {
+            return (_object->*_getter)();
+        }
+
+        T operator()() const
+        {
+            return (_object->*_getter)();
+        }
+    };
+
+    template<typename C, typename T>
+    class ReadOnlyProperty<C, T, typename std::enable_if<!std::is_fundamental<T>::value && !std::is_same<std::string, T>::value>::type>
+    {
+    public:
+        using Tgetter = T &(C::*)();
+
+    private:
+        C *const _object;
+        Tgetter const _getter;
+
+    public:
+        ReadOnlyProperty(C *propObject, Tgetter propGetter)
+        : _object{propObject}
+        , _getter{propGetter}
+        {
+
+        }
+
+        ReadOnlyProperty &operator=(const ReadOnlyProperty &) = delete;
+        ReadOnlyProperty(const ReadOnlyProperty &) = delete;
+
+        operator const T &() const
+        {
+            return (_object->*_getter)();
+        }
+
+        operator T&() const
+        {
+            return (_object->*_getter)();
+        }
+
+        const T &operator()()const
+        {
+            return (_object->*_getter)();
+        }
+
+        T &operator()() const
+        {
+            return (_object->*_getter)();
+        }
+    };
+
+    template<typename C, typename T, typename E = void>
+    class WriteOnlyProperty;
+
+    template<typename C, typename T>
+    class WriteOnlyProperty<C, T, typename std::enable_if<std::is_fundamental<T>::value || std::is_same<std::string, T>::value>::type>
+    {
+    public:
+        using Tsetter = void (C::*)(T);
+
+    private:
+        C *const _object;
+        Tsetter const _setter;
+
+    public:
+        WriteOnlyProperty(C *propObject, Tsetter propSetter)
+        : _object{propObject}
+        , _setter{propSetter}
+        {
+
+        }
+
+        WriteOnlyProperty &operator=(const WriteOnlyProperty &) = delete;
+        WriteOnlyProperty(const WriteOnlyProperty &) = delete;
+
+        C &operator=(T value)
+        {
+            (_object->*_setter)(value);
+            return *_object;
+        }
+    };
+
+    template<typename C, typename T>
+    class WriteOnlyProperty<C, T, typename std::enable_if<!std::is_fundamental<T>::value || !std::is_same<std::string, T>::value>::type>
+    {
+    public:
+        using Tsetter = void (C::*)(const T &);
+
+    private:
+        C *const _object;
+        Tsetter const _setter;
+
+    public:
+         WriteOnlyProperty(C *propObject, Tsetter propSetter)
+        : _object{propObject}
+        , _setter{propSetter}
+        {
+
+        }
+
+        WriteOnlyProperty &operator=(const WriteOnlyProperty &) = delete;
+        WriteOnlyProperty(const WriteOnlyProperty &) = delete;
+
+        C &operator=(const T &value)
+        {
+            (_object->*_setter)(value);
+            return *_object;
+        }
+    };
+
+    template<typename C, typename T, typename E = void>
+    class Property;
+
+    template<typename C, typename T>
+    class Property<C, T, typename std::enable_if<std::is_fundamental<T>::value || std::is_same<std::string, T>::value>::type>
+    {
+    public:
+        using Tsetter = void (C::*)(T);
+        using Tgetter = T (C::*)() const;
+
+    private:
+        C *const _object;
+        T C::*_attribute;
+        Tgetter const _getter;
+        Tsetter const _setter;
+
+    public:
+        Property(C *proObject, T C::*attribute)
+        : _object{proObject}
+        , _attribute{attribute}
+        , _getter{nullptr}
+        , _setter{nullptr}
+        {
+        }
+
+        Property(C *proObject, Tgetter propGetter, Tsetter propSetter)
+        : _object{proObject}
+        , _attribute{nullptr}
+        , _getter{propGetter}
+        , _setter{propSetter}
+        {
+        }
+
+        Property &operator=(const Property &) = delete;
+        Property(const Property &) = delete;
+
+        operator T() const
+        {
+            return _attribute ? (_object->*_attribute) : (_object->*_getter)();
+        }
+
+        T operator()() const
+        {
+            return _attribute ? (_object->*_attribute) : (_object->*_getter)();
+        }
+
+        C &operator=(T value)
+        {
+            if(_attribute)
+            {
+                (_object->*_attribute) = value;
+            }
+            else
+            {
+                (_object->*_setter)(value);
+            }
+
+            return *_object;
+        }
+    };
+
+    template<typename C, typename T>
+    class Property<C, T, typename std::enable_if<!std::is_fundamental<T>::value || !std::is_same<std::string, T>::value>::type>
+    {
+    public:
+        using Tsetter = void (C::*)(T);
+        using Tgetter = T (C::*)() const;
+
+    private:
+        C *const _object;
+        T C::*_attribute;
+        Tgetter const _getter;
+        Tsetter const _setter;
+
+    public:
+        Property(C *proObject, T C::*attribute)
+        : _object{proObject}
+        , _attribute{attribute}
+        , _getter{nullptr}
+        , _setter{nullptr}
+        {
+        }
+
+        Property(C *proObject, Tgetter propGetter, Tsetter propSetter)
+        : _object{proObject}
+        , _attribute{nullptr}
+        , _getter{propGetter}
+        , _setter{propSetter}
+        {
+        }
+
+
+        Property &operator=(const Property &) = delete;
+        Property(const Property &) = delete;
+
+        operator T &() const
+        {
+            return _attribute ? (_object->*_attribute) : (_object->*_getter)();
+        }
+
+        operator const T &() const
+        {
+            return _attribute ? (_object->*_attribute) : (_object->*_getter)(); 
+        }
+
+        T &operator()() const
+        {
+            return _attribute ? (_object->*_attribute) : (_object->*_getter)();
+        }
+
+        const T &operator()() const
+        {
+            return _attribute ? (_object->*_attribute) : (_object->*_getter)();
+        }
+
+        C &operator=(T value)
+        {
+            if(_attribute)
+            {
+                (_object->*_attribute) = value;
+            }
+            else
+            {
+                (_object->*_setter)(value);
+            }
+
+            return *_object;
+        }
+
+    };
 };  
 
 #endif

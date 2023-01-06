@@ -8,7 +8,7 @@
 #include <assert.h>
 
 #include <TML/DllLoader.hpp>
-
+#include <Torch/Interfaces/App3DFramework.hpp>
 
 namespace Torch
 {
@@ -23,7 +23,8 @@ namespace Torch
     private:
         static std::unique_ptr<Context> _context_instance;
 
-
+        App3DFramework *_app;
+        
     public:
         Context();
         ~Context();
@@ -33,6 +34,7 @@ namespace Torch
         static void Destroy();
         void Suspend();
         void Resume();
+        
 
     private:
         void DestoryAll();

@@ -19,6 +19,8 @@ namespace Torch
         ,_accumulate_time{0}
         ,_num_frames{0}
     {
+        // Context::Instance().a
+
         _main_wnd = this->MakeWindow(_name, native_wnd);
     }
 
@@ -56,7 +58,7 @@ namespace Torch
 
     std::shared_ptr<Window> App3DFramework::MakeWindow(std::string const &name, void *native_wnd)
     {
-         RenderSettings setting;
+        RenderSettings setting;
         return MakeSharedPtr<Window>(name, setting, native_wnd);
     }
 
