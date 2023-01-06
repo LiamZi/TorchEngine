@@ -14,11 +14,13 @@ SOURCE_GROUP("Base\\Header Files" FILES ${BASE_HEADER_FILES})
 
 set(RENDERER_SOURCE_FILES
     ${TORCH_PROJECT_DIR}/Core/Src/Renderer/ElementFormat.cpp
+    ${TORCH_PROJECT_DIR}/Core/Src/Renderer/Engine.cpp
 )
 
 set(RENDERER_HEADER_FILES
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Interfaces/RenderSettings.hpp
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Renderer/ElementFormat.hpp
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Interfaces/Engine.hpp
 )
 
 SOURCE_GROUP("Renderer\\Source Files" FILES ${RENDERER_SOURCE_FILES})

@@ -1,4 +1,4 @@
-# Install script for directory: F:/GitHub/TorchEngine/External/Build/CMake/GLad
+# Install script for directory: G:/GitHub/TorchEngine/External/Build/CMake/GLad
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

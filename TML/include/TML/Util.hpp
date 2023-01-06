@@ -92,8 +92,8 @@ namespace Torch
         using Tgetter = T &(C::*)();
 
     private:
-        C *const _object;
-        Tgetter const _getter;
+        C *_object;
+        Tgetter _getter;
 
     public:
         ReadOnlyProperty(C *propObject, Tgetter propGetter)
@@ -111,7 +111,7 @@ namespace Torch
             return (_object->*_getter)();
         }
 
-        operator T&() const
+        operator T&()
         {
             return (_object->*_getter)();
         }
@@ -121,7 +121,7 @@ namespace Torch
             return (_object->*_getter)();
         }
 
-        T &operator()() const
+        T &operator()()
         {
             return (_object->*_getter)();
         }
