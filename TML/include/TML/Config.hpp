@@ -27,4 +27,12 @@
     #define TORCH_IS_DEV_PLATFORM 0
 #endif
 
+#define FWD_STRUCT_SPTR(structName) \
+    struct structName; \
+    using structName##Ptr = std::shared_ptr<structName>;
+
+#define FWD_CLASS_SPTR(className) \
+    class className; \
+    using className##Ptr = std::shared_ptr<className>;
+
 #endif

@@ -7,11 +7,13 @@
 #include <memory>
 #include <assert.h>
 
+#include <TML/Util.hpp>
 #include <TML/DllLoader.hpp>
-#include <Torch/Interfaces/App3DFramework.hpp>
+
 
 namespace Torch
 {
+    FWD_CLASS_SPTR(App3DFramework);
 
     struct ContextCfg
     {
@@ -22,9 +24,8 @@ namespace Torch
     {
     private:
         static std::unique_ptr<Context> _context_instance;
+        App3DFrameworkPtr _app;
 
-        App3DFramework *_app;
-        
     public:
         Context();
         ~Context();
@@ -34,10 +35,16 @@ namespace Torch
         static void Destroy();
         void Suspend();
         void Resume();
-        
 
+    public:
+        Property<Context, App3DFrameworkPtr> App;
+        ReadOnlyProperty<Context, bool> AppValid;
+        
     private:
         void DestoryAll();
+        void setApp(const App3DFrameworkPtr &app);
+        App3DFrameworkPtr &getApp();
+        bool isAppValid() const;
 
     };
 };

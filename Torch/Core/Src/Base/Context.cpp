@@ -12,6 +12,7 @@
 #endif
 
 #include <Torch/Interfaces/Context.hpp>
+#include <Torch/Interfaces/App3DFramework.hpp>
 
 namespace
 {
@@ -23,6 +24,8 @@ namespace Torch
     std::unique_ptr<Context> Context::_context_instance;
 
     Context::Context()
+    : App{this, &Context::getApp, &Context::setApp}
+    , AppValid{this, &Context::isAppValid}
     {
 
     }
@@ -67,5 +70,20 @@ namespace Torch
 
     void Torch::Context::DestoryAll()
     {
+    }
+
+    void Torch::Context::setApp(const App3DFrameworkPtr &app)
+    {
+        _app = app;
+    }
+
+    App3DFrameworkPtr &Context::getApp()
+    {
+        return _app;
+    }
+
+    bool Torch::Context::isAppValid() const
+    {
+        return _app != nullptr;
     }
 };

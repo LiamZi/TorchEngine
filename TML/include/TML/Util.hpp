@@ -186,15 +186,15 @@ namespace Torch
         }
     };
 
-    template<typename C, typename T, typename E = void>
-    class Property;
+    template <typename C, typename T, typename E = void>
+    class Property; // undefined
 
-    template<typename C, typename T>
+    template <typename C, typename T>
     class Property<C, T, typename std::enable_if<std::is_fundamental<T>::value || std::is_same<std::string, T>::value>::type>
     {
     public:
-        using Tsetter = void (C::*)(T);
         using Tgetter = T (C::*)() const;
+        using Tsetter = void (C::*)(T);
 
     private:
         C *const _object;
@@ -203,8 +203,8 @@ namespace Torch
         Tsetter const _setter;
 
     public:
-        Property(C *proObject, T C::*attribute)
-        : _object{proObject}
+        Property(C *propObject, T C::*attribute)
+        : _object{propObject}
         , _attribute{attribute}
         , _getter{nullptr}
         , _setter{nullptr}
@@ -248,11 +248,11 @@ namespace Torch
     };
 
     template<typename C, typename T>
-    class Property<C, T, typename std::enable_if<!std::is_fundamental<T>::value || !std::is_same<std::string, T>::value>::type>
+    class Property<C, T, typename std::enable_if<!std::is_fundamental<T>::value && !std::is_same<std::string, T>::value>::type>
     {
     public:
-        using Tsetter = void (C::*)(T);
-        using Tgetter = T (C::*)() const;
+        using Tsetter = void (C::*)(const T &);
+        using Tgetter = T &(C::*)();
 
     private:
         C *const _object;
@@ -291,7 +291,7 @@ namespace Torch
             return _attribute ? (_object->*_attribute) : (_object->*_getter)(); 
         }
 
-        T &operator()() const
+        T &operator()()
         {
             return _attribute ? (_object->*_attribute) : (_object->*_getter)();
         }

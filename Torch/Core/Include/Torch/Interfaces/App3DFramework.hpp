@@ -8,8 +8,10 @@
 #include <Torch/Interfaces/Window.hpp>
 
 
+
 namespace Torch
 {
+    
     class TORCH_CORE_API App3DFramework
     {
     protected:
