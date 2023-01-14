@@ -22,7 +22,7 @@ add_executable(${EXE_NAME} WIN32
     # ${TORCH_PROJECT_DIR}/bin/Torch.cfg
 )
 
-add_dependencies(${EXE_NAME} AllInEngine)
+add_dependencies(${EXE_NAME} Engine)
 
 set_target_properties(
     ${EXE_NAME} PROPERTIES

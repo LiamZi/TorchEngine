@@ -42,4 +42,4 @@ target_link_libraries(${LIB_NAME}
     ${TORCH_CORELIB_NAME}
 )
 
-add_dependencies(AllInEngine ${LIB_NAME})
+add_dependencies(Engine ${LIB_NAME})

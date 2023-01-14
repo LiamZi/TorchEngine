@@ -30,4 +30,4 @@ set_target_properties(${LIB_NAME} PROPERTIES PROJECT_LABEL ${LIB_NAME} OUTPUT_NA
 
 target_link_libraries(${LIB_NAME} PUBLIC ${TORCH_CORELIB_NAME})
 
-add_dependencies(${LIB_NAME} AllInEngine)
+add_dependencies(${LIB_NAME} Engine)

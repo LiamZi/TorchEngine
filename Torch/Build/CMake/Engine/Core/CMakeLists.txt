@@ -84,6 +84,7 @@ TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${TORCH_PROJECT_DIR}/Core/Include/Torc
 target_link_libraries(${LIB_NAME} 
     PUBLIC
     TML
+    EASTL
 )
 
 
@@ -95,7 +96,7 @@ if(TORCH_PLATFORM_WINDOWS)
 
 endif()
 
-add_dependencies(AllInEngine ${LIB_NAME})
+add_dependencies(Engine ${LIB_NAME})
 
 if(TORCH_PLATFORM_WINDOWS_DESKTOP)
     set(rc_lib_name "Torch_RC")
@@ -107,5 +108,5 @@ if(TORCH_PLATFORM_WINDOWS_DESKTOP)
         FOLDER "Torch/Engine/Core"
     )
 
-    add_dependencies(AllInEngine ${rc_lib_name})
+    add_dependencies(Engine ${rc_lib_name})
 endif()

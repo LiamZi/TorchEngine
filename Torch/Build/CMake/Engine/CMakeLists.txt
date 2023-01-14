@@ -1,5 +1,5 @@
-add_custom_target(AllInEngine)
-SET_TARGET_PROPERTIES(AllInEngine PROPERTIES FOLDER "Torch/Engine")
+add_custom_target(Engine)
+SET_TARGET_PROPERTIES(Engine PROPERTIES FOLDER "Torch/Engine")
 
 add_subdirectory(Core)
 add_subdirectory(Plugins)

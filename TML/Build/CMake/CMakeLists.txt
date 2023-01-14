@@ -60,7 +60,6 @@ TORCH_ADD_PRECOMPILED_HEADER(${LIB_NAME} "${TML_PROJECT_DIR}/include/TML/TML.hpp
 target_link_libraries(${LIB_NAME}
 	PUBLIC
 		glm::glm
-
 	PRIVATE
 		rapidjson
 )
