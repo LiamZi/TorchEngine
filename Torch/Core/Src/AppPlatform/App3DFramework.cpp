@@ -50,13 +50,13 @@ namespace Torch
     {
     }
 
-    std::shared_ptr<Window> App3DFramework::MakeWindow(std::string const &name)
+    WindowPtr App3DFramework::MakeWindow(std::string const &name)
     {
         RenderSettings setting;
         return MakeSharedPtr<Window>(name, setting, nullptr);
     }
 
-    std::shared_ptr<Window> App3DFramework::MakeWindow(std::string const &name, void *native_wnd)
+    WindowPtr App3DFramework::MakeWindow(std::string const &name, void *native_wnd)
     {
         RenderSettings setting;
         return MakeSharedPtr<Window>(name, setting, native_wnd);

@@ -447,8 +447,8 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 GLM_FOUND:INTERNAL=TRUE
 GLM_INCLUDE_DIR:INTERNAL=G:/GitHub/TorchEngine/Build/CMake/../../External/GLM/glm;G:/GitHub/TorchEngine/Build/External/GLM/glm
 GLM_INCLUDE_DIRS:INTERNAL=G:/GitHub/TorchEngine/Build/CMake/../../External/GLM/glm;G:/GitHub/TorchEngine/Build/External/GLM/glm
-GLM_LIBRARIES:INTERNAL=
-GLM_LIBRARY:INTERNAL=
+GLM_LIBRARIES:INTERNAL=glm::glm_shared
+GLM_LIBRARY:INTERNAL=glm::glm_shared
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files/Torch
 

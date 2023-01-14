@@ -75,7 +75,8 @@
         "span": "cpp",
         "map": "cpp",
         "xtree": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "future": "cpp"
     },
     "editor.RainbowBrackets.enabled": true,
     "editor.guides.bracketPairs": "active"

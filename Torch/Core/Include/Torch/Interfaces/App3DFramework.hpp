@@ -11,7 +11,7 @@
 
 namespace Torch
 {
-    
+    FWD_CLASS_SPTR(Window)
     class TORCH_CORE_API App3DFramework
     {
     protected:
@@ -22,7 +22,7 @@ namespace Torch
         float _accumulate_time;
         uint32_t _num_frames;
 
-        std::shared_ptr<Window> _main_wnd;
+        WindowPtr _main_wnd;
     
     public:
         explicit App3DFramework(std::string const &name);
@@ -40,9 +40,9 @@ namespace Torch
 			return _name;
 		}
 
-		std::shared_ptr<Window> MakeWindow(std::string const & name);
-		std::shared_ptr<Window> MakeWindow(std::string const & name, void* native_wnd);
-		std::shared_ptr<Window> const & MainWnd() const
+		WindowPtr MakeWindow(std::string const & name);
+		WindowPtr MakeWindow(std::string const & name, void* native_wnd);
+		WindowPtr const & MainWnd() const
 		{
 			return _main_wnd;
 		}
