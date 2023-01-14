@@ -20,6 +20,26 @@
 
 namespace Torch
 {
+
+#if defined(TORCH_PLATFORM_ANDROID)
+#define INVOKE(X) typename std::result_of<X()>::type
+#else
+#define INVOKE(X) typename std::invoke_result<X>::type
+#endif
+
+    template <typename T>
+    inline std::future<INVOKE(T)> CreateThread(T func)
+    {
+        using result = INVOKE(T);
+
+        auto task = std::packaged_task<result_t()>(std::move(func));
+        auto ret = task.get_future();
+        auto thread = std::thread(std::move(task));
+        thread.detach();
+
+        return ret;
+    }
+
     class ThreadPool 
     {
         class CommitData;
@@ -52,7 +72,7 @@ namespace Torch
 
     private:
         CommitDataPtr _data;
-        
+
     public:
         ThreadPool(size_t num_min_cached_threads, size_t num_max_cached_thread);
 
