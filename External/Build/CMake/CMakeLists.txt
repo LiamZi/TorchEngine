@@ -98,8 +98,9 @@ function(UpdateExternalLib name url rev)
 	endif()
 
 	if(need_update_submodule)
+		message("need_update_submodule")
 		execute_process(COMMAND "${git_executable}" "submodule" "init" WORKING_DIRECTORY ${external_lib_folder})
-		execute_process(COMMAND "${git_executable}" "submodule" "update" "--remote --recursive" WORKING_DIRECTORY ${external_lib_folder})
+		execute_process(COMMAND "${git_executable}" "submodule" "update" "--remote" "--recursive" WORKING_DIRECTORY ${external_lib_folder})
 	endif()
 
 	set(${ARGV5} ${need_checkout} PARENT_SCOPE)
