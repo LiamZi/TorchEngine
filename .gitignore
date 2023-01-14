@@ -16,7 +16,7 @@
 /Build/x64
 /Build/CMakeCache.txt
 /Build/TML
-/Build/External
+/Build/External/*
 !/Build/CMake/*
 !/Build/CMake/Modules/*
 Torch/lib/*
