@@ -12,7 +12,7 @@
 namespace Torch
 {
     FWD_CLASS_SPTR(Window)
-    class TORCH_CORE_API App3DFramework
+    class TORCH_CORE_API App3DFramework : public std::enable_shared_from_this<App3DFramework>
     {
     protected:
         std::string _name;

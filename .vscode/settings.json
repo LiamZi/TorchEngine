@@ -76,7 +76,19 @@
         "map": "cpp",
         "xtree": "cpp",
         "set": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "bitset": "cpp",
+        "codecvt": "cpp",
+        "condition_variable": "cpp",
+        "csignal": "cpp",
+        "deque": "cpp",
+        "queue": "cpp",
+        "ranges": "cpp",
+        "scoped_allocator": "cpp",
+        "stack": "cpp",
+        "typeindex": "cpp",
+        "unordered_set": "cpp",
+        "variant": "cpp"
     },
     "editor.RainbowBrackets.enabled": true,
     "editor.guides.bracketPairs": "active"

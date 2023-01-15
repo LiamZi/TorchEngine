@@ -13,6 +13,7 @@
 
 #include <Torch/Interfaces/Context.hpp>
 #include <Torch/Interfaces/App3DFramework.hpp>
+#include <TML/Thread.hpp>
 
 namespace
 {
@@ -24,10 +25,10 @@ namespace Torch
     std::unique_ptr<Context> Context::_context_instance;
 
     Context::Context()
-    : App{this, &Context::getApp, &Context::setApp}
+    : _app{nullptr}
     , AppValid{this, &Context::isAppValid}
     {
-
+        _tp_instance = MakeUniquePtr<ThreadPool>(1, 8);
     }
 
     Context::~Context()
@@ -68,21 +69,31 @@ namespace Torch
     {
     }
 
-    void Torch::Context::DestoryAll()
+    void Context::DestoryAll()
     {
     }
 
-    void Torch::Context::setApp(const App3DFrameworkPtr &app)
+    void Context::setApp(App3DFramework *app)
     {
         _app = app;
     }
 
-    App3DFrameworkPtr &Context::getApp()
+    App3DFramework *Context::getApp()
     {
         return _app;
     }
 
-    bool Torch::Context::isAppValid() const
+    void Context::setConfig(const ContextCfg &cfg)
+    {
+        _cfg = cfg;
+    }
+
+    ContextCfg &Context::getConfig()
+    {
+        return _cfg;
+    }
+
+    bool Context::isAppValid() const
     {
         return _app != nullptr;
     }

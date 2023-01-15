@@ -6,7 +6,7 @@
 #include <Torch/Torch.hpp>
 #include <Torch/Interfaces/App3DFramework.hpp>
 
-class Tutor : public Torch::App3DFramework
+class Tutor final : public Torch::App3DFramework
 {
 
 public:

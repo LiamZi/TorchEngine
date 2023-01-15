@@ -9,22 +9,33 @@
 
 #include <TML/Util.hpp>
 #include <TML/DllLoader.hpp>
+#include <Torch/Interfaces/RenderSettings.hpp>
 
 
 namespace Torch
 {
-    FWD_CLASS_SPTR(App3DFramework);
+    class App3DFramework;
+    class ThreadPool;
 
     struct ContextCfg
     {
+        std::string _render_factory_name;
+        std::string _input_factory_name;
+        std::string _scene_manager_name;
 
+        RenderSettings _graphics_cfg;
+        bool _deferred_rendering;
+        bool _perf_profiler;
+        bool _location_sensor;
     };
 
     class TORCH_CORE_API Context
     {
     private:
         static std::unique_ptr<Context> _context_instance;
-        App3DFrameworkPtr _app;
+        App3DFramework *_app;
+        std::unique_ptr<ThreadPool> _tp_instance;
+        ContextCfg _cfg;
 
     public:
         Context();
@@ -35,16 +46,22 @@ namespace Torch
         static void Destroy();
         void Suspend();
         void Resume();
+        RenderFactory &RenderFactoryInstance();
 
     public:
-        Property<Context, App3DFrameworkPtr> App;
         ReadOnlyProperty<Context, bool> AppValid;
+
+
+        void setApp(App3DFramework *app);
+        App3DFramework *getApp();
+        void setConfig(const ContextCfg &cfg);
+        ContextCfg &getConfig();
+        
         
     private:
         void DestoryAll();
-        void setApp(const App3DFrameworkPtr &app);
-        App3DFrameworkPtr &getApp();
         bool isAppValid() const;
+      
 
     };
 };

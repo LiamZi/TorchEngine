@@ -19,7 +19,14 @@ namespace Torch
         ,_accumulate_time{0}
         ,_num_frames{0}
     {
-        // Context::Instance().a
+        Context::Instance().setApp(this);
+
+        auto cfg = Context::Instance().getConfig();
+
+        if(cfg._deferred_rendering)
+        {
+            //TODO: register deferred rendering module.
+        }
 
         _main_wnd = this->MakeWindow(_name, native_wnd);
     }
