@@ -1,4 +1,4 @@
-#ifndef __TORCH_PLUGINS_OGL_RENDER_ENGINE_HPP__
+﻿#ifndef __TORCH_PLUGINS_OGL_RENDER_ENGINE_HPP__
 #define __TORCH_PLUGINS_OGL_RENDER_ENGINE_HPP__
 
 #pragma once
@@ -23,7 +23,7 @@ namespace Torch
 
     private:
         virtual std::wstring &_Name() override;
-
+        virtual void _CreateRenderWindow(std::string const& name, RenderSettings const& settings) override;
     };
 };
 

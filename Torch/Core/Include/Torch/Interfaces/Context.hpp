@@ -1,4 +1,4 @@
-#ifndef __TORCH_CORE_INCLUDE_TORCH_CONTEXT_HPP__
+﻿#ifndef __TORCH_CORE_INCLUDE_TORCH_CONTEXT_HPP__
 #define __TORCH_CORE_INCLUDE_TORCH_CONTEXT_HPP__
 
 #pragma once
@@ -46,7 +46,8 @@ namespace Torch
         static void Destroy();
         void Suspend();
         void Resume();
-        RenderFactory &RenderFactoryInstance();
+        //RenderFactory &RenderFactoryInstance();
+
 
     public:
         ReadOnlyProperty<Context, bool> AppValid;

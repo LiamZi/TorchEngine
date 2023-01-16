@@ -1,4 +1,4 @@
-#ifndef __TORCH_CORE_INCLUDE_TORCH_INTERFACES_ENGINE_HPP__
+﻿#ifndef __TORCH_CORE_INCLUDE_TORCH_INTERFACES_ENGINE_HPP__
 #define __TORCH_CORE_INCLUDE_TORCH_INTERFACES_ENGINE_HPP__
 
 #pragma once
@@ -25,6 +25,7 @@ namespace Torch
 
     private:
         virtual std::wstring &_Name() = 0;
+        virtual void _CreateRenderWindow(std::string const& name, RenderSettings const& settings) = 0;
 
     };
 };

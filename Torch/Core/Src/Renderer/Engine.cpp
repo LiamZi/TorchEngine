@@ -1,4 +1,4 @@
-#include <Torch/Torch.hpp>
+﻿#include <Torch/Torch.hpp>
 
 #include <TML/Util.hpp>
 #include <glm/glm.hpp>
@@ -22,6 +22,7 @@ namespace Torch
 
     void Engine::CreateRenderWindow(std::string const &name, RenderSettings &settings)
     {
+        this->_CreateRenderWindow(name, settings);
     }
 
     void Engine::DestroyRenderWindow()
