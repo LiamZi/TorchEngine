@@ -32,4 +32,12 @@ namespace Torch
 	void Canvas::ApplicationDWillEnterForeground()
 	{
 	}
+
+    void Canvas::Present()
+    {
+    }
+
+    void Canvas::WaitOnPresent()
+    {
+    }
 };

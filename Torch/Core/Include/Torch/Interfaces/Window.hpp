@@ -1,4 +1,4 @@
-#ifndef __TORCH_CORE_INCLUDE_TORCH_WINDOW_HPP__
+﻿#ifndef __TORCH_CORE_INCLUDE_TORCH_WINDOW_HPP__
 #define __TORCH_CORE_INCLUDE_TORCH_WINDOW_HPP__
 
 #pragma once
@@ -58,12 +58,29 @@ namespace Torch
         Window(std::string const &name, RenderSettings const &setting, void* native_wnd);
         ~Window();
 
+        HWND HWnd() const
+        {
+            return _wnd;
+        }
+
+    public:
+        ReadOnlyProperty<Window, float> DPI;
+        Property<Window, bool> Active;
+        Property<Window, bool> Ready;
+        ReadOnlyProperty<Window, uint32_t> Left;
+        ReadOnlyProperty<Window, uint32_t> Top;
+        ReadOnlyProperty<Window, uint32_t> Width;
+        ReadOnlyProperty<Window, uint32_t> Height;
+
+    private:
+        void UpdateDpiScale(float scale);
+        float _getDPI() const;
         bool isActive() const
         {
             return _active;
         }
 
-        void setActive(bool active)
+        void setActive(const bool active)
         {
             _active = active;
         }
@@ -78,15 +95,29 @@ namespace Torch
             _ready = ready;
         }
 
-    private:
-        void UpdateDpiScale(float scale);
-    
+        uint32_t _getLeft() const
+        {
+            return _left;
+        }
+
+        uint32_t _getTop() const
+        {
+            return _top;
+        }
+
+        uint32_t _getWidth() const
+        {
+            return _width;
+        }
+
+        uint32_t _getHeight() const
+        {
+            return _height;
+        }
+
 #if defined TORCH_PLATFORM_WINDOWS
 #if defined TORCH_PLATFORM_WINDOWS_DESKTOP
-        HWND HWnd() const
-        {
-            return _wnd;
-        }
+
 
     private:
         static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;

@@ -27,6 +27,7 @@ namespace Torch
 		bool _color_gradient;
 		float _max_dpi_scale;
 		bool _debug_context;
+		std::vector<std::pair<std::string, std::string>> options;
 
 		RenderSettings()
 			: _hide_win(false)

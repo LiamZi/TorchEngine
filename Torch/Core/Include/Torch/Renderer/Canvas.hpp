@@ -33,6 +33,9 @@ namespace Torch
 		void ApplicationDidEnterBackground();
 		void ApplicationDWillEnterForeground();
 
+		virtual void Present();
+		virtual void WaitOnPresent();
+
 	public:
 		Property<Canvas, ViewportPtr> Viewport;
 

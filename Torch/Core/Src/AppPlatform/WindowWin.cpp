@@ -65,8 +65,13 @@ namespace Torch
     , _effective_dpi_scale{1}
     , _win_Roation{WindowRotation::WR_Identity}
     , _hide{setting._hide_win}
-
-
+    , DPI{this, &Window::_getDPI}
+    , Active(this, &Window::isActive, &Window::setActive)
+    , Ready(this, &Window::isReady, &Window::setReady)
+    , Left(this, &Window::_getLeft)
+    , Top(this, &Window::_getTop)
+    , Width(this, &Window::_getWidth)
+    , Height(this, &Window::_getHeight)
     {
         DetectsDpi();
         KeepScreenOn();

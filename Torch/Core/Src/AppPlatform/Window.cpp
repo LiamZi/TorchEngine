@@ -1,4 +1,4 @@
-#include <Torch/Torch.hpp>
+﻿#include <Torch/Torch.hpp>
 #include <Torch/Interfaces/Context.hpp>
 
 #include <Torch/Interfaces/Window.hpp>
@@ -11,4 +11,8 @@ namespace Torch
 
     }
 
+    float Window::_getDPI() const
+    {
+        return _dpi_scale;
+    }
 }
