@@ -25,23 +25,23 @@ namespace Torch
     std::unique_ptr<Context> Context::_context_instance;
 
     Context::Context()
-    : _app{nullptr}
-    , AppValid{this, &Context::isAppValid}
+        : _app{ nullptr }
+        , AppValid{ this, &Context::isAppValid }
     {
         _tp_instance = MakeUniquePtr<ThreadPool>(1, 8);
     }
 
     Context::~Context()
     {
-        
+
     }
 
-    Context &Torch::Context::Instance()
+    Context& Torch::Context::Instance()
     {
-        if(!_context_instance)
+        if (!_context_instance)
         {
             std::lock_guard<std::mutex> lock(singleton_mutex);
-            if(!_context_instance)
+            if (!_context_instance)
             {
                 _context_instance = MakeUniquePtr<Context>();
             }
@@ -53,7 +53,7 @@ namespace Torch
     void Context::Destroy()
     {
         std::lock_guard<std::mutex> lock(singleton_mutex);
-        if(_context_instance)
+        if (_context_instance)
         {
             _context_instance->DestoryAll();
             _context_instance.reset();
@@ -62,11 +62,20 @@ namespace Torch
 
     void Context::Suspend()
     {
-        
+
     }
 
     void Context::Resume()
     {
+    }
+
+    void Context::LoadRenderEngine(std::string const& name)
+    {
+        _render_engine.reset();
+
+        _render_loader.Free();
+
+        std::string render_path = ResourceLoader::Instance().Locate("Render");
     }
 
     void Context::DestoryAll()

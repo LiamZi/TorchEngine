@@ -24,9 +24,10 @@ namespace Torch
 
 		bool _is_full_screen;
 		uint32_t _color_bits;
+		std::wstring _description;
 
-		Observable<OGLCanvas> _on_size;
-		Observable<OGLCanvas> _on_exit_size;
+		Observable<WindowPtr> _on_size;
+		Observable<WindowPtr> _on_exit_size;
 
 
 	public:
@@ -45,7 +46,7 @@ namespace Torch
 
 	private:
 		void _OnExitSize(WindowPtr const& win);
-		void _OnSize(WindowPtr const& win, bool active);
+		void _OnSize(WindowPtr const& win, EventState &state);
 
 
 	private:

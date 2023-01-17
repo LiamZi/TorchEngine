@@ -1,4 +1,6 @@
 ﻿#include <span>
+#include <TML/Util.hpp>
+#include <OpenGL/OGLRenderEngine.hpp>
 #include <OpenGL/OGLCanvas.hpp>
 #include <Torch/Interfaces/Context.hpp>
 
@@ -16,14 +18,14 @@ namespace Torch
 
 		auto main_wnd = Context::Instance().getApp()->MainWnd();
 
-		_on_size.Add([this](WindowPtr const& win) ->void
+		_on_exit_size.Add([this](WindowPtr* win, EventState&) -> void
 			{
-				this->_OnExitSize(win);
+				this->_OnExitSize(*win);
 			});
 
-		_on_size.Add([this](WindowPtr const& win, bool active) ->void
+		_on_size.Add([this](WindowPtr* win, EventState& state) -> void
 			{
-				this->_OnSize(win, active);
+				this->_OnSize(*win, state);
 			});
 
 		const float dpi_scale = main_wnd->DPI;
@@ -72,7 +74,6 @@ namespace Torch
 				}
 			}
 
-
 			available_versions = std::span<std::pair<int, int> const, -1>(all_versions).subspan(version_start_index);
 
 			uint32_t depth_bits = 24;
@@ -105,12 +106,35 @@ namespace Torch
 				style = WS_OVERLAPPEDWINDOW;
 			}
 
+			RECT rect = { 0, 0, static_cast<LONG>(_width), static_cast<LONG>(_height) };
+			::AdjustWindowRect(&rect, style, false);
+
+			::SetWindowLongPtrW(_hWnd, GWL_STYLE, style);
+			::SetWindowPos(_hWnd, nullptr, settings._left, settings._top, rect.right - rect.left, rect.bottom - rect.top, SWP_SHOWWINDOW | SWP_NOZORDER);
+
+			auto &render_engine = reinterpret_cast<OGLRenderEngine &>(Context::Instance().)
+
 
 		}
 
+
+		_description = L"OGL Canvas.";
 	}
 
     OGLCanvas::~OGLCanvas() = default;
+
+	void OGLCanvas::Destroy()
+	{
+	}
+
+	void OGLCanvas::Present()
+	{
+	}
+
+	std::wstring const& OGLCanvas::Description() const
+	{
+		return _description;
+	}
 
     void OGLCanvas::Resize(uint32_t width, uint32_t height)
     {
@@ -120,7 +144,7 @@ namespace Torch
 	{
 	}
 
-	void OGLCanvas::_OnSize(WindowPtr const& win, bool active)
+	void OGLCanvas::_OnSize(WindowPtr const& win, EventState &state)
 	{
 	}
 

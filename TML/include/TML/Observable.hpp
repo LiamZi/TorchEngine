@@ -2,7 +2,7 @@
 #define __TML_OBSERVABLE_HPP__
 
 #pragma once
-#include <TML/Until.hpp>
+#include <TML/Util.hpp>
 #include <TML/EventState.hpp>
 #include <TML/Observer.hpp>
 
@@ -12,7 +12,7 @@ namespace Torch
     class Observable
     {
     public:
-        using CallBackFunc = std::function<void(T *eventData, EventState &eventState)>;
+        using CallbackFunc = std::function<void(T *eventData, EventState &eventState)>;
         using SPTR = std::shared_ptr<Observable<T>>;
 
     private:
@@ -77,8 +77,9 @@ namespace Torch
         typename Observer<T>::Ptr Add(CallbackFunc&& callback, int mask = -1, bool insertFirst = false,
                                     void** scope = nullptr, bool unregisterOnFirstCall = false)
         {
-            if (!callback) {
-            return nullptr;
+            if (!callback) 
+            {
+                return nullptr;
             }
 
             const auto observer = std::make_shared<Observer<T>>(std::move(callback), mask, scope);
@@ -143,7 +144,7 @@ namespace Torch
                 return true;
             }
 
-            auto &state = _eventState;
+            auto &state = _event_state;
             state._mask = mask;
             state._target = target;
             state._current_target = currentTarget;
@@ -182,7 +183,7 @@ namespace Torch
                 return;
             }
 
-            auto &state = _eventState;
+            auto &state = _event_state;
             state._mask = mask;
             state._skip_next_observers = false;
 

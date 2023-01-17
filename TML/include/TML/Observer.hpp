@@ -12,13 +12,13 @@ namespace Torch
     class Observer
     {
     public:
-        using CallBackFunc = std::function<void(T *eventData, EventState &eventState)>;
+        using CallbackFunc = std::function<void(T *eventData, EventState &eventState)>;
         using Ptr = std::shared_ptr<Observer<T>>;
 
     public:
         bool _will_be_unregistered;
         bool _unregister_on_next_call;
-        CallBackFunc _call_back;
+        CallbackFunc _call_back;
         int _mask;
         void **_scope;
 
@@ -32,7 +32,7 @@ namespace Torch
         {
         }
 
-        Observer(const CallbackFunc &callback, int mask, any *scope)
+        Observer(const CallbackFunc &callback, int mask, void **scope)
             : _will_be_unregistered{false}
             , _unregister_on_next_call{false}
 			, _call_back{ callback }

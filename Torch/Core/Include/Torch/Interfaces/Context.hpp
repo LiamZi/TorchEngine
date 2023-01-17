@@ -16,6 +16,7 @@ namespace Torch
 {
     class App3DFramework;
     class ThreadPool;
+    class OGLRenderEngine;
 
     struct ContextCfg
     {
@@ -37,6 +38,11 @@ namespace Torch
         std::unique_ptr<ThreadPool> _tp_instance;
         ContextCfg _cfg;
 
+    private:
+        DllLoader _render_loader;
+
+        std::unique_ptr<OGLRenderEngine> _render_engine;
+
     public:
         Context();
         ~Context();
@@ -46,8 +52,7 @@ namespace Torch
         static void Destroy();
         void Suspend();
         void Resume();
-        //RenderFactory &RenderFactoryInstance();
-
+        void LoadRenderEngine(std::string const& name);
 
     public:
         ReadOnlyProperty<Context, bool> AppValid;

@@ -28,6 +28,8 @@ namespace Torch
     {
         static std::wstring name(L"OpenGL Render Engine.");
         return name;
+// wglMakeCurrent
+    
     }
 
     void OGLRenderEngine::_CreateRenderWindow(std::string const& name, RenderSettings const& settings)
@@ -36,3 +38,11 @@ namespace Torch
     }
 
 };
+
+extern "C"
+{
+    TORCH_SYMBOL_EXPORT void MakeRenderEngine(std::unique_ptr<Torch::OGLRenderEngine>& ptr)
+    {
+        ptr = Torch::MakeUniquePtr<Torch::OGLRenderEngine>();
+    }
+}

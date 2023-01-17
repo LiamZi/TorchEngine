@@ -38,6 +38,8 @@ namespace Torch
 
     void App3DFramework::Create()
     {
+        auto cfg = Context::Instance().getConfig();
+        Context::Instance().setConfig(cfg);
     }
 
     void App3DFramework::Destroy()
@@ -79,7 +81,7 @@ namespace Torch
 
         while (WM_QUIT != msg.message)
         {
-            if(_main_wnd->isActive())
+            if(_main_wnd->Active)
             {
                 gotMsg = (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) != 0);
             }

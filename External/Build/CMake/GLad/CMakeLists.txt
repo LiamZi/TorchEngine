@@ -18,7 +18,7 @@ add_library(${LIB_NAME}
     ${GLAD_SOURCE_FILES} ${GLAD_HEADER_FILES}
 )
 
-target_include_directories(${LIB_NAME} PUBLIC ${GLAD_PROJECT_DIR})
+target_include_directories(${LIB_NAME} INTERFACE ${GLAD_PROJECT_DIR})
 
 set_target_properties(${LIB_NAME} PROPERTIES 
                 PROJECT_LABEL ${LIB_NAME}
