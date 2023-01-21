@@ -26,10 +26,10 @@ namespace Torch
     }
 
     template <typename T, typename... Args>
-    inline std::shared_ptr<T> MakeSharedPtr(Args&&... args)
-    {
-        return std::make_shared<T>(std::forward<Args>(args)...);
-    }
+	inline std::shared_ptr<T> MakeSharedPtr(Args&&... args)
+	{
+		return std::make_shared<T>(std::forward<Args>(args)...);
+	}
 
     template<typename T, typename... Args>
     inline std::unique_ptr<T> MakeUniquePtrHelper(std::true_type, size_t size)
@@ -151,15 +151,15 @@ namespace Torch
         WriteOnlyProperty &operator=(const WriteOnlyProperty &) = delete;
         WriteOnlyProperty(const WriteOnlyProperty &) = delete;
 
-        C &operator=(T value)
+        C &operator=(T Value) // NOLINT
         {
-            (_object->*_setter)(value);
+            (_object->*_setter)(Value);
             return *_object;
         }
     };
 
     template<typename C, typename T>
-    class WriteOnlyProperty<C, T, typename std::enable_if<!std::is_fundamental<T>::value || !std::is_same<std::string, T>::value>::type>
+    class WriteOnlyProperty<C, T, typename std::enable_if<!std::is_fundamental<T>::value && !std::is_same<std::string, T>::value>::type>
     {
     public:
         using Tsetter = void (C::*)(const T &);
@@ -179,9 +179,9 @@ namespace Torch
         WriteOnlyProperty &operator=(const WriteOnlyProperty &) = delete;
         WriteOnlyProperty(const WriteOnlyProperty &) = delete;
 
-        C &operator=(const T &value)
+        C &operator=(const T &newValue)
         {
-            (_object->*_setter)(value);
+            (_object->*_setter)(newValue);
             return *_object;
         }
     };

@@ -85,10 +85,10 @@ namespace Torch
             template<typename T>
             std::future<INVOKE(T)> QueueThread(T func)
             {
-                using result_t = INVOKE(T);
+                using result = INVOKE(T);
 
-                auto task = MakeSharedPtr<std::packaged_task<result_t()>>(std::move(func));
-                auto ret = task->get_futrue();
+                auto task = MakeSharedPtr<std::packaged_task<result()>>(std::move(func));
+                auto ret = task->get_future();
                 
                 std::lock_guard<std::mutex> lock(_mutex);
 

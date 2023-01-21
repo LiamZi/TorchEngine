@@ -67,7 +67,7 @@ namespace Torch
 					{
 						if(all_version_names[i] == opt_value)
 						{
-							version_start_index = i;
+							version_start_index = static_cast<uint32_t>(i);
 							break;
 						}
 					}
@@ -112,7 +112,7 @@ namespace Torch
 			::SetWindowLongPtrW(_hWnd, GWL_STYLE, style);
 			::SetWindowPos(_hWnd, nullptr, settings._left, settings._top, rect.right - rect.left, rect.bottom - rect.top, SWP_SHOWWINDOW | SWP_NOZORDER);
 
-			auto &render_engine = reinterpret_cast<OGLRenderEngine &>(Context::Instance().)
+			//auto &render_engine = reinterpret_cast<OGLRenderEngine &>(Context::Instance().)
 
 
 		}

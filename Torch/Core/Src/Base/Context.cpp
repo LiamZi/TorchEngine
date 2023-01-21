@@ -14,6 +14,7 @@
 #include <Torch/Interfaces/Context.hpp>
 #include <Torch/Interfaces/App3DFramework.hpp>
 #include <TML/Thread.hpp>
+#include <Torch/Interfaces/Engine.hpp>
 
 namespace
 {
@@ -75,11 +76,16 @@ namespace Torch
 
         _render_loader.Free();
 
-        std::string render_path = ResourceLoader::Instance().Locate("Render");
+        //std::string render_path = ResourceLoader::Instance().Locate("Render");
     }
 
     void Context::DestoryAll()
     {
+    }
+
+    ThreadPool &Context::ThreadPools()
+    {
+        return *_tp_instance;
     }
 
     void Context::setApp(App3DFramework *app)

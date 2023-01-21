@@ -1,67 +1,134 @@
-#ifndef __TORCH_CORE_RESOURCE_LOADER_HPP__
-#define __TORCH_CORE_RESOURCE_LOADER_HPP__
+#include <Torch/Resources/ResourceLoader.hpp>
+#include <Torch/Interfaces/Context.hpp>
 
-#pragma once
-
-#include <istream>
-#include <string>
-#include <vector>
-
-#include <TML/Thread.hpp>
-
+namespace 
+{
+	std::mutex singleton_mutex;
+};
 
 namespace Torch
 {
-	class TORCH_CORE_API ResourceDesc
-	{
-	public:
-		virtual ~ResourceDesc() noexcept;
-		virtual uint64_t Type() const = 0;
-		virtual bool StateLess() const = 0;
-		virtual std::shared_ptr<void> CreateResource()
+	std::unique_ptr<ResourceLoader> ResourceLoader::_res_loader_instance = nullptr;
+
+    ResourceLoader::ResourceLoader()
+    {
+#if defined TORCH_PLATFORM_WINDOWS
+		char buf[MAX_PATH];
+		::GetModuleFileNameA(nullptr, buf, sizeof(buf));
+		_exe_path = buf;
+		_exe_path = _exe_path.substr(0, _exe_path.rfind("\\"));
+		_local_path = _exe_path + "/";
+#elif defined TORCH_PLATFORM_DARWIN
+		uint32_t size = 0;
+		_NSGetExecutablePath(nullptr, &size);
+		auto buffer = MakeUniquePtr<char[]>(size + 1);
+		_NSGetExecutablePath(buffer.get(), &size);
+		buffer[size] = '\0';
+		_exe_path = buffer.get();
+		_exe_path = _exe_path.substr(0, _exe_path.find_last_of("/") + 1);
+		_local_path = _exe_path;
+#endif
+		_paths.emplace_back(0, 0, "");
+
+		this->AddPath("");
+
+#if defined TORCH_PLATFORM_WINDOWS_DESKTOP
+		::GetCurrentDirectoryA(sizeof(buf), buf);
+		char *colon = std::find(buf, buf + sizeof(buf), ':');
+		assert(colon != buf + sizeof(buf));
+		colon[1] = '/';
+		colon[2] = '\0';
+		this->AddPath(buf);
+#endif
+
+		this->AddPath("..");
+
+		_loading_thread = Context::Instance().ThreadPools().QueueThread([this] {
+			this->LoadingThreadFunc();
+		});
+
+
+    }
+
+    ResourceLoader::~ResourceLoader() noexcept = default;
+
+
+    ResourceLoader &ResourceLoader::Instance()
+    {
+        if(!_res_loader_instance)
 		{
-			return std::shared_ptr<void>();
+			std::lock_guard<std::mutex> lock(singleton_mutex);
+			if(!_res_loader_instance)
+			{
+				_res_loader_instance = MakeUniquePtr<ResourceLoader>();
+			}
 		}
 
-		virtual void SubThreadStage() = 0;
-		virtual void MainThreadStage() = 0;
-		virtual bool HasSubTreadStage() const = 0;
-		virtual bool Match(ResourceDesc const& other) const = 0;
-		virtual void CopyDataFrom(ResourceDesc const& other) = 0;
-		virtual std::shared_ptr<void> CloneResourceFrom(std::shared_ptr<void> const& other) = 0;
-		virtual std::shared_ptr<void> Resource() const = 0;
-	};
+		return *_res_loader_instance;
+    }
+    void ResourceLoader::Destroy()
+    {
+		_res_loader_instance.reset();
+    }
 
-	FWD_CLASS_SPTR(ResourceDesc);
+    void ResourceLoader::Pause()
+    {
+    }
 
-	class TORCH_CORE_API ResourceLoader
-	{
-	private:
-		static std::unique_ptr<ResourceLoader> _res_loader_instance;
+    void ResourceLoader::Resume()
+    {
+    }
 
-		enum LoadStatus
-		{
-			LS_LOADING,
-			LS_COMPLETE,
-			LS_REMOVED
-		};
+    void ResourceLoader::AddPath(std::string_view path)
+    {
+    }
 
-		std::string _exe_path;
-		std::string _local_path;
-		std::vector<std::tuple<uint64_t, uint32_t, std::string>> _paths;
-		std::mutex _paths_mutex;
-		std::mutex _loaded_mutex;
-		std::mutex _loading_mutex;
-		std::vector<std::pair<ResourceDescPtr, std::weak_ptr<void>>> _loaded_res;
-		std::vector<std::pair<ResourceDescPtr, std::shared_ptr<volatile LoadStatus>>> _loading_res;
-		bool _non_empty_loading_res_queue = false;
-		std::condition_variable _loading_res_queue_cv;
-		std::mutex _loading_res_queue_mutex;
-		std::vector<std::pair<ResourceDesc, std::shared_ptr<volatile LoadStatus>>> _loading_res_queue;
+    void ResourceLoader::DeletePath(std::string_view path)
+    {
+    }
 
-		std::future<void> _loading_thread;
-		volatile bool _quite{ false };
-	};
+    void ResourceLoader::IsInPath(std::string_view paht)
+    {
+    }
+    void ResourceLoader::Mount(std::string_view virtual_path, std::string_view phy_path)
+    {
+    }
+    void ResourceLoader::Unmount(std::string_view virtual_path, std::string_view phy_path)
+    {
+    }
+    ResIdentifierPtr ResourceLoader::Open(std::string_view path)
+    {
+        return ResIdentifierPtr();
+    }
+    std::string ResourceLoader::Locate(std::string_view name)
+    {
+        return std::string();
+    }
+    uint64_t ResourceLoader::Timestamp(std::string_view name)
+    {
+        return 0;
+    }
+    std::string ResourceLoader::Guid(std::string_view name)
+    {
+        return std::string();
+    }
+    std::string ResourceLoader::AbsPath(std::string_view path)
+    {
+        return std::string();
+    }
+    void ResourceLoader::Update()
+    {
+    }
+    std::string ResourceLoader::RealPath(std::string_view path)
+    {
+        return std::string();
+    }
+    std::string ResourceLoader::RealPath(std::string_view path, std::string &package_path, std::string &password, std::string &path_in_package)
+    {
+        return std::string();
+    }
+
+    void ResourceLoader::LoadingThreadFunc()
+    {
+    }
 };
-
-#endif // !__TORCH_CORE_RESOURCE_LOADER_HPP__
