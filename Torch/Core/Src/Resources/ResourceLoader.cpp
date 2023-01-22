@@ -1,6 +1,7 @@
 #include <Torch/Resources/ResourceLoader.hpp>
 #include <Torch/Interfaces/Context.hpp>
-
+#include <filesystem>
+#include <algorithm>
 namespace 
 {
 	std::mutex singleton_mutex;
@@ -50,7 +51,16 @@ namespace Torch
 
     }
 
-    ResourceLoader::~ResourceLoader() noexcept = default;
+    ResourceLoader::~ResourceLoader()
+    {
+        _quit = true;
+
+        std::unique_lock<std::mutex> lock(_loading_res_queue_mutex, std::try_to_lock);
+        _non_empty_loading_res_queue = true;
+        _loading_res_queue_cv.notify_one();
+
+        _loading_thread.wait();
+    }
 
 
     ResourceLoader &ResourceLoader::Instance()
@@ -81,51 +91,103 @@ namespace Torch
 
     void ResourceLoader::AddPath(std::string_view path)
     {
+        this->Mount("", path);
     }
 
     void ResourceLoader::DeletePath(std::string_view path)
     {
+        this->Unmount("", path);
     }
 
     void ResourceLoader::IsInPath(std::string_view paht)
     {
     }
+
     void ResourceLoader::Mount(std::string_view virtual_path, std::string_view phy_path)
     {
     }
+
     void ResourceLoader::Unmount(std::string_view virtual_path, std::string_view phy_path)
     {
     }
+
     ResIdentifierPtr ResourceLoader::Open(std::string_view path)
     {
         return ResIdentifierPtr();
     }
+
     std::string ResourceLoader::Locate(std::string_view name)
     {
         return std::string();
     }
+
     uint64_t ResourceLoader::Timestamp(std::string_view name)
     {
         return 0;
     }
+
     std::string ResourceLoader::Guid(std::string_view name)
     {
         return std::string();
     }
+
     std::string ResourceLoader::AbsPath(std::string_view path)
     {
-        return std::string();
+        std::string path_str(path);
+        std::filesystem::path new_path(path_str);
+        if(!new_path.is_absolute())
+        {
+            std::filesystem::path full_path = std::filesystem::path(_exe_path) / new_path;
+            std::error_code error_code;
+            if(!std::filesystem::exists(full_path, error_code))
+            {
+                try
+                {
+                    full_path = std::filesystem::current_path() / new_path;
+                }
+                catch(...)
+                {
+                    full_path = new_path;
+                }
+
+                if(!std::filesystem::exists(full_path, error_code))
+                {
+                    return "";
+                }
+            }
+            new_path = full_path;
+        }
+        std::string ret = new_path.string();
+    
+#if defined TORCH_PLATFORM_WINDOWS
+        std::replace(ret.begin(), ret.end(), '\\', '/');
+#endif
+        return ret;
     }
+
     void ResourceLoader::Update()
     {
     }
     std::string ResourceLoader::RealPath(std::string_view path)
     {
-        return std::string();
+       std::string package_path;
+       std::string password;
+       std::string path_in_package;
+       return this->RealPath(path, package_path, password, path_in_package);
     }
     std::string ResourceLoader::RealPath(std::string_view path, std::string &package_path, std::string &password, std::string &path_in_package)
     {
-        return std::string();
+        package_path = "";
+        password = "";
+        path_in_package = "";
+
+        std::string abs_path = this->AbsPath(path);
+        if (abs_path.back() != '/')
+        {
+            abs_path.push_back('/');
+        }
+
+        return abs_path;
     }
 
     void ResourceLoader::LoadingThreadFunc()

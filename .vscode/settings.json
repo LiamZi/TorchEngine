@@ -88,7 +88,8 @@
         "stack": "cpp",
         "typeindex": "cpp",
         "unordered_set": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "filesystem": "cpp"
     },
     "editor.RainbowBrackets.enabled": true,
     "editor.guides.bracketPairs": "active"

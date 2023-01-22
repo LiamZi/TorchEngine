@@ -37,7 +37,7 @@ namespace Torch
 		std::mutex _loading_res_queue_mutex;
 
 		std::future<void> _loading_thread;
-		volatile bool _quite{ false };
+		volatile bool _quit{ false };
 
 	public:
 		ResourceLoader();
@@ -59,7 +59,6 @@ namespace Torch
         ResIdentifierPtr Open(std::string_view path);
         std::string Locate(std::string_view name);
         uint64_t Timestamp(std::string_view name);
-        std::string Guid(std::string_view name);
         std::string AbsPath(std::string_view path);
 
         void Update();
@@ -72,7 +71,7 @@ namespace Torch
     private:
         std::string RealPath(std::string_view path);
         std::string RealPath(std::string_view path, std::string &package_path, std::string &password, std::string &path_in_package);
-        
+        std::string Guid(std::string_view name);
         void LoadingThreadFunc();
 
 	};
