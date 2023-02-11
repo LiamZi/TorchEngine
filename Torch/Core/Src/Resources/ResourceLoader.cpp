@@ -1,7 +1,18 @@
-#include <Torch/Resources/ResourceLoader.hpp>
+#include <Torch/Torch.hpp>
+
 #include <Torch/Interfaces/Context.hpp>
 #include <filesystem>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+
+#include <TML/Guid.hpp>
+#include <TML/Hash.hpp>
+#include <TML/ResIdentifier.hpp>
+
+#include <Torch/Resources/ResourceLoader.hpp>
+
+
 namespace 
 {
 	std::mutex singleton_mutex;
@@ -29,7 +40,7 @@ namespace Torch
 		_exe_path = _exe_path.substr(0, _exe_path.find_last_of("/") + 1);
 		_local_path = _exe_path;
 #endif
-		_paths.emplace_back(0, 0, "");
+		_paths.emplace_back(0, 0, "", "");
 
 		this->AddPath("");
 
@@ -99,36 +110,186 @@ namespace Torch
         this->Unmount("", path);
     }
 
-    void ResourceLoader::IsInPath(std::string_view paht)
+    bool ResourceLoader::IsInPath(std::string_view path)
     {
+        std::string_view virtual_path = "";
+        
+        std::lock_guard<std::mutex> lock(_paths_mutex);
+        std::string real_path = this->RealPath(path);
+        if(!real_path.empty())
+        {
+            std::string virtual_path_str(virtual_path);
+            if(!virtual_path.empty() && (virtual_path.back() != '/'))
+            {
+                virtual_path_str.push_back('/');
+            }
+            
+            const uint64_t virtual_path_hash = HashValue(virtual_path_str);
+
+            bool found = false;
+            for(auto const &path : _paths)
+            {
+                if((std::get<0>(path) == virtual_path_hash) && (std::get<2>(path) == real_path))
+                {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
+        }
+        else
+        {
+            return false;
+        }   
+
     }
 
     void ResourceLoader::Mount(std::string_view virtual_path, std::string_view phy_path)
     {
+        std::lock_guard<std::mutex> lock(_paths_mutex);
+
+        std::string package_path;
+        std::string password;
+        std::string path_in_package;
+        std::string real_path = this->RealPath(phy_path, package_path, password, path_in_package);
+        if(!real_path.empty())
+        {
+            std::string virtual_path_str(virtual_path);
+            if(!virtual_path.empty() && (virtual_path.back() != '/'))
+            {
+                virtual_path_str.push_back('/');
+            }
+
+            const uint64_t virtual_path_hash = HashValue(virtual_path_str);
+            bool found = false;
+            for(const auto &path : _paths)
+            {
+                if((std::get<0>(path) == virtual_path_hash) && (std::get<2>(path) == real_path))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+            {
+                return;
+            }
+
+            _paths.emplace_back(virtual_path_hash, static_cast<uint32_t>(virtual_path_str.size()), real_path, std::move(""));
+        }
     }
 
     void ResourceLoader::Unmount(std::string_view virtual_path, std::string_view phy_path)
     {
+        std::lock_guard<std::mutex> lock(_paths_mutex);
+        std::string real_path = this->RealPath(phy_path);
+        if(!real_path.empty())
+        {
+            std::string virtual_path_str(virtual_path);
+            if(!virtual_path.empty() && (virtual_path.back() != '/'))
+            {
+                virtual_path_str.push_back('/');
+            }
+
+            const uint64_t virtual_path_hash = HashValue(virtual_path_str);
+
+            for(auto iter = _paths.begin(); iter != _paths.end(); ++iter)
+            {
+                if((std::get<0>(*iter)  == virtual_path_hash) && (std::get<2>(*iter) == real_path))
+                {
+                    _paths.erase(iter);
+                    break;
+                }
+            }
+        }
     }
 
-    ResIdentifierPtr ResourceLoader::Open(std::string_view path)
+    ResIdentifierPtr ResourceLoader::Open(std::string_view name)
     {
+       if(name.empty()) return ResIdentifierPtr();
+
+#if defined(TORCH_PLATFORM_ANDROID)
+#elif defined(TORCH_PLATFORM_IOS)
+#else
+        std::lock_guard<std::mutex> lock(_paths_mutex);
+        for(const auto &path : _paths)
+        {
+            if((std::get<1>(path) != 0) || (HashRange(name.begin(), name.begin() + std::get<0>(path)) == std::get<0>(path)))
+            {
+                std::string res_name(std::get<2>(path) + std::string(name.substr(std::get<1>(path))));
+#if defined TORCH_PLATFORM_WINDOWS
+                std::replace(res_name.begin(), res_name.end(), '\\', '/');
+#endif
+                std::filesystem::path res_path(res_name);
+                std::error_code ec;
+                if(std::filesystem::exists(res_path, ec))
+                {
+                    const uint64_t timestamp = std::filesystem::last_write_time(res_path).time_since_epoch().count();
+                    return MakeSharedPtr<ResIdentifier>(name, timestamp, MakeSharedPtr<std::ifstream>(res_name.c_str(), std::ios_base::binary));
+
+                }
+            }
+
+            
+            if((std::get<1>(path) == 0) && std::filesystem::path(name.begin(), name.end()).is_absolute())
+            {
+                break;
+            }
+        }
+
+#endif
         return ResIdentifierPtr();
     }
 
     std::string ResourceLoader::Locate(std::string_view name)
     {
-        return std::string();
+        if(name.empty()) return "";
+
+#if defined(TORCH_PLATFORM_ANDROID)
+#elif defined(TORCH_PLATFORM_IOS)
+#else
+        std::lock_guard<std::mutex> lock(_paths_mutex);
+        for(const auto &path : _paths)
+        {
+            if((std::get<0>(path) != 0) || (HashRange(name.begin(), name.begin() + std::get<1>(path)) == std::get<0>(path)))
+            {
+                std::string res_name(std::get<2>(path) + std::string(name.substr(std::get<1>(path))));
+#if defined TORCH_PLATFORM_WINDOWS
+                std::replace(res_name.begin(), res_name.end(), '\\', '/');
+#endif
+                std::error_code ec;
+                if(std::filesystem::exists(std::filesystem::path(res_name), ec))
+                {
+                    return res_name;
+                }
+            }
+
+            if((std::get<1>(path) == 0) && std::filesystem::path(name.begin(), name.end()).is_absolute())
+            {
+                break;
+            }
+        }
+#endif
+        return "";
     }
 
     uint64_t ResourceLoader::Timestamp(std::string_view name)
     {
-        return 0;
+        uint64_t timestamp = 0;
+        auto res_path = this->Locate(name);
+        if(!res_path.empty())
+        {
+#if !defined(TORCH_PLATFORM_ANDROID)
+            timestamp = std::filesystem::last_write_time(res_path).time_since_epoch().count();
+#endif
+        }
+        return timestamp;
     }
 
     std::string ResourceLoader::Guid(std::string_view name)
     {
-        return std::string();
+        return GUID::RandomId();
     }
 
     std::string ResourceLoader::AbsPath(std::string_view path)
@@ -167,7 +328,9 @@ namespace Torch
 
     void ResourceLoader::Update()
     {
+        // std::vector<std::pair<ResourceLoader>>
     }
+
     std::string ResourceLoader::RealPath(std::string_view path)
     {
        std::string package_path;
@@ -175,6 +338,7 @@ namespace Torch
        std::string path_in_package;
        return this->RealPath(path, package_path, password, path_in_package);
     }
+    
     std::string ResourceLoader::RealPath(std::string_view path, std::string &package_path, std::string &password, std::string &path_in_package)
     {
         package_path = "";

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <mutex>
 #include <sstream>
+#include <iostream>
 
 #if defined(TORCH_PLATFORM_WINDOWS)
 #include <windows.h>
@@ -15,6 +16,10 @@
 #include <Torch/Interfaces/App3DFramework.hpp>
 #include <TML/Thread.hpp>
 #include <Torch/Interfaces/Engine.hpp>
+#include <Torch/Resources/ResourceLoader.hpp>
+#include <Torch/Interfaces/LowLevelApi.hpp>
+
+#define TORCH_DLL_PREFIX DLL_PREFIX TML_STRINGIZE(NAME)
 
 namespace
 {
@@ -24,6 +29,8 @@ namespace
 namespace Torch
 {
     std::unique_ptr<Context> Context::_context_instance;
+
+    using MakeLowLevelApiFunc = void (*)(std::unique_ptr<LowLevelApi> &ptr);
 
     Context::Context()
         : _app{ nullptr }
@@ -72,9 +79,26 @@ namespace Torch
 
     void Context::LoadRenderEngine(std::string const& name)
     {
-        _render_engine.reset();
+        _low_level_api.reset();
 
         _render_loader.Free();
+        
+        std::string engine_path = ResourceLoader::Instance().Locate("Render");
+        std::string fn = TORCH_DLL_PREFIX"_Engine_" + name + DLL_PREFIX;
+
+        std::string path = engine_path + "/" + fn;
+        _render_loader.Load(ResourceLoader::Instance().Locate(path));
+
+        auto *mrf = reinterpret_cast<MakeLowLevelApiFunc>(_render_loader.GetProcAddress("MakeLowLevelApi"));
+        if(mrf != nullptr)
+        {
+            mrf(_low_level_api);
+        }
+        else
+        {
+            std::cout << "Loading " << path << " failed " << std::endl;
+            _render_loader.Free();
+        }
 
         //std::string render_path = ResourceLoader::Instance().Locate("Render");
     }
@@ -106,6 +130,29 @@ namespace Torch
     ContextCfg &Context::getConfig()
     {
         return _cfg;
+    }
+
+    LowLevelApi &Context::LowLevelApiInstance()
+    {
+        if(!_low_level_api)
+        {
+            std::lock_guard<std::mutex> lock(singleton_mutex);
+            if(!_low_level_api)
+            {
+                this->LoadRenderEngine(_cfg._render_engine_name);
+            }
+        }
+        return *_low_level_api;
+    }
+
+    bool Context::LowLevelApiValid() const
+    {
+        return _low_level_api.get() != nullptr;
+    }
+
+    bool Context::EngineValid() const
+    {
+        return _render_engine != nullptr;
     }
 
     bool Context::isAppValid() const

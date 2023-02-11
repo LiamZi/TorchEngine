@@ -25,6 +25,7 @@ set(BASE_HEADER_FILES
 	${TML_PROJECT_DIR}/include/TML/ResIdentifier.hpp
 	${TML_PROJECT_DIR}/include/TML/Guid.hpp
 	${TML_PROJECT_DIR}/include/TML/Random.hpp
+	${TML_PROJECT_DIR}/include/TML/Hash.hpp
 )
 
 set(BASE_SOURCE_FILES

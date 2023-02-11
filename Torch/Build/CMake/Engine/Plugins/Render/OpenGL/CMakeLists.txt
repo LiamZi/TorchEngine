@@ -8,12 +8,14 @@ set(OPENGL_SOURCE_FILES
     ${TORCH_PROJECT_DIR}/Plugins/Src/Render/OpenGL/OGLRenderEngine.cpp
     ${TORCH_PROJECT_DIR}/Plugins/Src/Render/OpenGL/OGLFrameBuffer.cpp
     ${TORCH_PROJECT_DIR}/Plugins/Src/Render/OpenGL/OGLCanvas.cpp
+    ${TORCH_PROJECT_DIR}/Plugins/Src/Render/OpenGL/OGLLowLevelApi.cpp
 )
 
 set(OPENGL_HEADER_FILES
     ${TORCH_PROJECT_DIR}/Plugins/Include/OpenGL/OGLRenderEngine.hpp
     ${TORCH_PROJECT_DIR}/Plugins/Include/OpenGL/OGLFrameBuffer.hpp
     ${TORCH_PROJECT_DIR}/Plugins/Include/OpenGL/OGLCanvas.hpp
+    ${TORCH_PROJECT_DIR}/Plugins/Include/OpenGL/OGLLowLevelApi.hpp
 )
 
 source_group("Source FIles" FILES ${OPENGL_SOURCE_FILES})

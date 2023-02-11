@@ -8,7 +8,6 @@
 #include <OpenGL/OGLFrameBuffer.hpp>
 #include <TML/Observable.hpp>
 
-
 namespace Torch
 {
 	FWD_CLASS_SPTR(Window);

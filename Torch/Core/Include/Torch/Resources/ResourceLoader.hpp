@@ -13,6 +13,13 @@ namespace Torch
 {
     FWD_CLASS_SPTR(ResIdentifier);
 
+	class TORCH_CORE_API ResDesc
+	{
+	public:
+		virtual ~ResDesc() noexcept {}
+		virtual uint16_t Type() const { return 0; }
+	};
+
 	class TORCH_CORE_API ResourceLoader
 	{
 	private:
@@ -27,7 +34,7 @@ namespace Torch
 
 		std::string _exe_path;
 		std::string _local_path;
-		std::vector<std::tuple<uint64_t, uint32_t, std::string>> _paths;
+		std::vector<std::tuple<uint64_t, uint32_t, std::string, std::string>> _paths;
 		std::mutex _paths_mutex;
 		std::mutex _loaded_mutex;
 		std::mutex _loading_mutex;
@@ -51,7 +58,7 @@ namespace Torch
 
 		void AddPath(std::string_view path);
 		void DeletePath(std::string_view path);
-		void IsInPath(std::string_view paht);
+		bool IsInPath(std::string_view paht);
 
         void Mount(std::string_view virtual_path, std::string_view phy_path);
         void Unmount(std::string_view virtual_path, std::string_view phy_path);

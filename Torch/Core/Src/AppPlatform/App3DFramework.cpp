@@ -4,6 +4,7 @@
 #include <Torch/Interfaces/Window.hpp>
 #include <assert.h>
 #include <Torch/Interfaces/App3DFramework.hpp>
+#include <Torch/Interfaces/Engine.hpp>
 
 namespace Torch
 {
@@ -39,6 +40,7 @@ namespace Torch
     void App3DFramework::Create()
     {
         auto cfg = Context::Instance().getConfig();
+        // auto engine = Context::Instance().EngineInstance();
         Context::Instance().setConfig(cfg);
     }
 

@@ -38,11 +38,3 @@ namespace Torch
     }
 
 };
-
-extern "C"
-{
-    TORCH_SYMBOL_EXPORT void MakeRenderEngine(std::unique_ptr<Torch::OGLRenderEngine>& ptr)
-    {
-        ptr = Torch::MakeUniquePtr<Torch::OGLRenderEngine>();
-    }
-}
