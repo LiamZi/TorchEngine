@@ -173,10 +173,8 @@ namespace Torch
 
             if(!found)
             {
-                return;
+                _paths.emplace_back(virtual_path_hash, static_cast<uint32_t>(virtual_path_str.size()), real_path, std::move(""));
             }
-
-            _paths.emplace_back(virtual_path_hash, static_cast<uint32_t>(virtual_path_str.size()), real_path, std::move(""));
         }
     }
 

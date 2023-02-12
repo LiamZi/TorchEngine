@@ -12,6 +12,15 @@
 
 #include <TML/Log.hpp>
 
+#ifdef TORCH_DEBUG
+#define TORCH_DBG_SUFFIX "_d"
+#else
+#define TORCH_DBG_SUFFIX ""
+#endif
+
+#define TORCH_OUTPUT_SUFFIX "_" TML_STRINGIZE(TORCH_COMPILER_NAME) TML_STRINGIZE(TORCH_COMPILER_VERSION) TORCH_DBG_SUFFIX
+
+
 namespace Torch
 {
 

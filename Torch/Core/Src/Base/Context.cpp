@@ -19,7 +19,7 @@
 #include <Torch/Resources/ResourceLoader.hpp>
 #include <Torch/Interfaces/LowLevelApi.hpp>
 
-#define TORCH_DLL_PREFIX DLL_PREFIX TML_STRINGIZE(NAME)
+#define TORCH_DLL_PREFIX DLL_PREFIX TML_STRINGIZE(TORCH_NAME)
 
 namespace
 {
@@ -37,6 +37,7 @@ namespace Torch
         , AppValid{ this, &Context::isAppValid }
     {
         _tp_instance = MakeUniquePtr<ThreadPool>(1, 8);
+        _cfg._render_engine_name = "OpenGL";
     }
 
     Context::~Context()
@@ -84,7 +85,7 @@ namespace Torch
         _render_loader.Free();
         
         std::string engine_path = ResourceLoader::Instance().Locate("Render");
-        std::string fn = TORCH_DLL_PREFIX"_Engine_" + name + DLL_PREFIX;
+        std::string fn = TORCH_DLL_PREFIX"_Engine_" + name + DLL_SUFFIX;
 
         std::string path = engine_path + "/" + fn;
         _render_loader.Load(ResourceLoader::Instance().Locate(path));
