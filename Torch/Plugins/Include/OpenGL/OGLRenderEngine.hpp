@@ -24,6 +24,7 @@ namespace Torch
     private:
         virtual std::wstring &_Name() override;
         virtual void _CreateRenderWindow(std::string const& name, RenderSettings const& settings) override;
+        std::unique_ptr<LowLevelApi> DoCreateLowLevelApi() override;
     };
 };
 

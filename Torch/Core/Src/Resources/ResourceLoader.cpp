@@ -356,5 +356,26 @@ namespace Torch
 
     void ResourceLoader::LoadingThreadFunc()
     {
+        while(!_quit)
+        {
+            std::vector<std::pair<ResDescPtr, std::shared_ptr<volatile LoadStatus>>> loading_res_queue_copy;
+
+            std::unique_lock<std::mutex> lock(_loading_res_queue_mutex);
+            _loading_res_queue_cv.wait(lock, [this] { return _non_empty_loading_res_queue; });
+
+            loading_res_queue_copy.swap(_loading_res_queue);
+            _non_empty_loading_res_queue = false;
+
+            for(auto &res_pair : loading_res_queue_copy)
+            {
+                if(LS_LOADING == *res_pair.second)
+                {
+                    res_pair.first->SubThreadStage();
+                    *res_pair.second = LS_COMPLETE;
+                }
+            }
+
+            Sleep(10);
+        }
     }
 };

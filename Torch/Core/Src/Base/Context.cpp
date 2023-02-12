@@ -30,7 +30,7 @@ namespace Torch
 {
     std::unique_ptr<Context> Context::_context_instance;
 
-    using MakeLowLevelApiFunc = void (*)(std::unique_ptr<LowLevelApi> &ptr);
+    using MakeRenderEngineFunc = void (*)(std::unique_ptr<Engine> &ptr);
 
     Context::Context()
         : _app{ nullptr }
@@ -79,7 +79,7 @@ namespace Torch
 
     void Context::LoadRenderEngine(std::string const& name)
     {
-        _low_level_api.reset();
+        _render_engine.reset();
 
         _render_loader.Free();
         
@@ -89,18 +89,16 @@ namespace Torch
         std::string path = engine_path + "/" + fn;
         _render_loader.Load(ResourceLoader::Instance().Locate(path));
 
-        auto *mrf = reinterpret_cast<MakeLowLevelApiFunc>(_render_loader.GetProcAddress("MakeLowLevelApi"));
+        auto *mrf = reinterpret_cast<MakeRenderEngineFunc>(_render_loader.GetProcAddress("MakeRenderEngine"));
         if(mrf != nullptr)
         {
-            mrf(_low_level_api);
+            mrf(_render_engine);
         }
         else
         {
             std::cout << "Loading " << path << " failed " << std::endl;
             _render_loader.Free();
         }
-
-        //std::string render_path = ResourceLoader::Instance().Locate("Render");
     }
 
     void Context::DestoryAll()
@@ -132,17 +130,17 @@ namespace Torch
         return _cfg;
     }
 
-    LowLevelApi &Context::LowLevelApiInstance()
+    Engine &Context::EngineInstance()
     {
-        if(!_low_level_api)
+        if(!_render_engine)
         {
             std::lock_guard<std::mutex> lock(singleton_mutex);
-            if(!_low_level_api)
+            if(!_render_engine)
             {
                 this->LoadRenderEngine(_cfg._render_engine_name);
             }
         }
-        return *_low_level_api;
+        return *_render_engine;
     }
 
     bool Context::LowLevelApiValid() const

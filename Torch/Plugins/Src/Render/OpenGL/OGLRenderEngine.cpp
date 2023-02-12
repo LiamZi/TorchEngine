@@ -12,6 +12,7 @@
 
 #include <OpenGL/OGLRenderEngine.hpp>
 #include <OpenGL/OGLCanvas.hpp>
+#include <OpenGL/OGLLowLevelApi.hpp>
 
 namespace Torch
 {
@@ -23,6 +24,7 @@ namespace Torch
     OGLRenderEngine::~OGLRenderEngine()
     {
     }
+
 
     std::wstring &OGLRenderEngine::_Name()
     {
@@ -37,4 +39,16 @@ namespace Torch
         auto win = MakeSharedPtr<OGLCanvas>(name, settings);
     }
 
+    std::unique_ptr<LowLevelApi> OGLRenderEngine::DoCreateLowLevelApi()
+    {
+        return MakeUniquePtr<OGLLowLevelApi>();
+    }
 };
+
+extern "C"
+{
+    TORCH_SYMBOL_EXPORT void MakeRenderEngine(std::unique_ptr<Torch::Engine> &ptr)
+    {
+        ptr = Torch::MakeUniquePtr<Torch::OGLRenderEngine>();
+    }
+}

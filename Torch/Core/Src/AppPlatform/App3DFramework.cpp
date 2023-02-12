@@ -40,7 +40,8 @@ namespace Torch
     void App3DFramework::Create()
     {
         auto cfg = Context::Instance().getConfig();
-        // auto engine = Context::Instance().EngineInstance();
+        Context::Instance().EngineInstance().LowLevelApiInstance();
+
         Context::Instance().setConfig(cfg);
     }
 

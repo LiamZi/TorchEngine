@@ -14,10 +14,4 @@ namespace Torch
     }
 };
 
-extern "C"
-{
-    TORCH_SYMBOL_EXPORT void MakeLowLevelApi(std::unique_ptr<Torch::LowLevelApi> &ptr)
-    {
-        ptr = Torch::MakeUniquePtr<Torch::OGLLowLevelApi>();
-    }
-}
+

@@ -12,12 +12,24 @@
 namespace Torch
 {
     FWD_CLASS_SPTR(ResIdentifier);
+	FWD_CLASS_SPTR(ResDesc);
 
 	class TORCH_CORE_API ResDesc
 	{
 	public:
 		virtual ~ResDesc() noexcept {}
 		virtual uint16_t Type() const { return 0; }
+		virtual bool StateLess() const { return false; }
+		virtual void SubThreadStage() {};
+		virtual void MainThreadStage() {};
+		virtual bool HasSubThreadStage() const { return false; }
+
+		virtual std::shared_ptr<void> CreateRes()
+		{
+			return std::shared_ptr<void>();
+		}
+
+		
 	};
 
 	class TORCH_CORE_API ResourceLoader
@@ -42,6 +54,9 @@ namespace Torch
 		bool _non_empty_loading_res_queue = false;
 		std::condition_variable _loading_res_queue_cv;
 		std::mutex _loading_res_queue_mutex;
+		std::vector<std::pair<ResDescPtr, std::shared_ptr<volatile LoadStatus>>> _loading_res_queue;
+		std::vector<std::pair<ResDescPtr, std::weak_ptr<void>>> _loaded_res;
+		std::vector<std::pair<ResDescPtr, std::shared_ptr<volatile LoadStatus>>> _loading_res;
 
 		std::future<void> _loading_thread;
 		volatile bool _quit{ false };
