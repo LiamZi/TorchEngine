@@ -37,6 +37,11 @@ namespace Torch
     void OGLRenderEngine::_CreateRenderWindow(std::string const& name, RenderSettings const& settings)
     {
         auto win = MakeSharedPtr<OGLCanvas>(name, settings);
+
+        if(GLAD_GL_VERSION_4_6)
+        {
+
+        }
     }
 
     std::unique_ptr<LowLevelApi> OGLRenderEngine::DoCreateLowLevelApi()

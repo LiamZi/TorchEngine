@@ -4,10 +4,14 @@ set(LIB_NAME GLad)
 
 set(GLAD_SOURCE_FILES
     ${GLAD_PROJECT_DIR}/glad.c
+    ${GLAD_PROJECT_DIR}/glad_wgl.c
+    # ${GLAD_PROJECT_DIR}/glad_egl.c
 )
 
 set(GLAD_HEADER_FILES
     ${GLAD_PROJECT_DIR}/glad.h
+    ${GLAD_PROJECT_DIR}/glad_wgl.h
+    # ${GLAD_PROJECT_DIR}/glad_egl.h
     ${GLAD_PROJECT_DIR}/khrplatform.h
 )
 

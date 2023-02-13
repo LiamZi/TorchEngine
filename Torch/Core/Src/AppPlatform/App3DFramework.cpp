@@ -41,7 +41,7 @@ namespace Torch
     {
         auto cfg = Context::Instance().getConfig();
         Context::Instance().EngineInstance().LowLevelApiInstance();
-
+        Context::Instance().EngineInstance().CreateRenderWindow(_name, cfg._graphics_cfg);
         Context::Instance().setConfig(cfg);
     }
 

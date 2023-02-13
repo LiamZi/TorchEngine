@@ -1,10 +1,13 @@
 ﻿#include <span>
+#include <glad_wgl.h>
+
 #include <TML/Util.hpp>
 #include <OpenGL/OGLRenderEngine.hpp>
 #include <OpenGL/OGLCanvas.hpp>
 #include <Torch/Interfaces/Context.hpp>
 
 #include "Torch/Interfaces/App3DFramework.hpp"
+
 
 namespace Torch
 {
@@ -112,8 +115,51 @@ namespace Torch
 			::SetWindowLongPtrW(_hWnd, GWL_STYLE, style);
 			::SetWindowPos(_hWnd, nullptr, settings._left, settings._top, rect.right - rect.left, rect.bottom - rect.top, SWP_SHOWWINDOW | SWP_NOZORDER);
 
-			//auto &render_engine = reinterpret_cast<OGLRenderEngine &>(Context::Instance().)
+			auto &lowLevelApi = reinterpret_cast<OGLRenderEngine &>(Context::Instance().EngineInstance().LowLevelApiInstance());
 
+			uint32_t sample_count = settings._sample_count;
+			int requested_pixel_format = -1;
+			PIXELFORMATDESCRIPTOR requested_pfd{};
+
+			{
+				WNDCLASSEXW wc;
+				wc.cbSize = sizeof(wc);
+				wc.style = CS_OWNDC;
+				wc.lpfnWndProc = DefWindowProc;
+				wc.cbClsExtra = 0;
+				wc.cbWndExtra = sizeof(this);
+				wc.hInstance = ::GetModuleHandle(nullptr);
+				wc.hIcon = nullptr;
+				wc.hCursor = ::LoadCursor(nullptr, IDC_ARROW);
+				wc.hbrBackground = static_cast<HBRUSH>(::GetStockObject(BLACK_BRUSH));
+				wc.lpszMenuName = nullptr;
+				wc.lpszClassName = L"Canvas";
+				wc.hIconSm = nullptr;
+				::RegisterClassExW(&wc);
+
+				HWND wnd = ::CreateWindow(wc.lpszClassName, L"", WS_OVERLAPPEDWINDOW, 0, 0 , 1, 1, nullptr, nullptr, wc.hInstance, nullptr);
+				HDC dc = ::GetDC(wnd);
+
+				PIXELFORMATDESCRIPTOR pfd;
+				memset(&pfd, 0, sizeof(pfd));
+				pfd.nSize = sizeof(pfd);
+				pfd.nVersion = 1;
+				pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+				pfd.iPixelType = PFD_TYPE_RGBA;
+				pfd.cColorBits = static_cast<BYTE>(_color_bits);
+				pfd.cDepthBits = static_cast<BYTE>(depth_bits);
+				pfd.cStencilBits = static_cast<BYTE>(stencil_bits);
+				pfd.iLayerType = PFD_MAIN_PLANE;
+
+				int pixel_format = ::ChoosePixelFormat(dc, &pfd);
+				assert(pixel_format != 0);
+
+				::SetPixelFormat(dc, pixel_format, &pfd);
+
+				auto rc = gladLoadWGL(dc);
+
+
+			}
 
 		}
 

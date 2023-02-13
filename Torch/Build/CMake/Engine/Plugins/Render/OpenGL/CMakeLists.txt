@@ -28,6 +28,9 @@ target_include_directories(${LIB_NAME}
     ${TORCH_PROJECT_DIR}/Plugins/Include
 )
 
+message("RENDER OGL : ${TORCH_OUTPUT_SUFFIX}")
+message("RENDER OGL PROJECT_LABEL ${PROJECT_LABEL}")
+
 set_target_properties(${LIB_NAME} PROPERTIES
     PROJECT_LABEL ${LIB_NAME}
     OUTPUT_NAME ${LIB_NAME}${TORCH_OUTPUT_SUFFIX}

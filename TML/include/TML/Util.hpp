@@ -1,4 +1,4 @@
-#ifndef __TML_INCLUDE_TML_UTIL_HPP
+﻿#ifndef __TML_INCLUDE_TML_UTIL_HPP
 #define __TML_INCLUDE_TML_UTIL_HPP
 
 #pragma once
@@ -13,7 +13,8 @@
 #include <TML/Log.hpp>
 
 #ifdef TORCH_DEBUG
-#define TORCH_DBG_SUFFIX "_d"
+//#define TORCH_DBG_SUFFIX "_d"
+#define TORCH_DBG_SUFFIX ""
 #else
 #define TORCH_DBG_SUFFIX ""
 #endif
