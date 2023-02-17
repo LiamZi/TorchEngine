@@ -4,6 +4,7 @@
 #pragma once
 
 #include <vector>
+#include <Torch/Renderer/ElementFormat.hpp>
 
 namespace Torch
 {
@@ -28,6 +29,9 @@ namespace Torch
 		float _max_dpi_scale;
 		bool _debug_context;
 		std::vector<std::pair<std::string, std::string>> options;
+		ElementFormat _color_format;
+		ElementFormat _depth_stencil_format;
+		StereoMethod _stereo_method;
 
 		RenderSettings()
 			: _hide_win(false)

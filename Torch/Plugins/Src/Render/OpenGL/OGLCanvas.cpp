@@ -1,12 +1,16 @@
 ﻿#include <span>
 #include <glad_wgl.h>
+#include <glad.h>
+
+#include <TML/Config.hpp>
 
 #include <TML/Util.hpp>
 #include <OpenGL/OGLRenderEngine.hpp>
 #include <OpenGL/OGLCanvas.hpp>
 #include <Torch/Interfaces/Context.hpp>
 
-#include "Torch/Interfaces/App3DFramework.hpp"
+#include <Torch/Interfaces/App3DFramework.hpp>
+#include <OpenGL/OGLLowLevelApi.hpp>
 
 
 namespace Torch
@@ -15,6 +19,7 @@ namespace Torch
 		:OGLFrameBuffer(false)
 		, FullScreen{this, &OGLCanvas::_getFullScreen, &OGLCanvas::_setFullScreen}
 	{
+
 		_name = name;
 		_is_full_screen = settings._full_screen;
 		_color_bits = 32;
@@ -30,6 +35,7 @@ namespace Torch
 			{
 				this->_OnSize(*win, state);
 			});
+
 
 		const float dpi_scale = main_wnd->DPI;
 		_width = static_cast<uint32_t>(settings._width * dpi_scale + 0.5f);
@@ -85,6 +91,8 @@ namespace Torch
 			_hWnd = main_wnd->HWnd();
 			_hDC = ::GetDC(_hWnd);
 
+			
+
 			uint32_t style;
 			if(_is_full_screen)
 			{
@@ -115,7 +123,7 @@ namespace Torch
 			::SetWindowLongPtrW(_hWnd, GWL_STYLE, style);
 			::SetWindowPos(_hWnd, nullptr, settings._left, settings._top, rect.right - rect.left, rect.bottom - rect.top, SWP_SHOWWINDOW | SWP_NOZORDER);
 
-			auto &lowLevelApi = reinterpret_cast<OGLRenderEngine &>(Context::Instance().EngineInstance().LowLevelApiInstance());
+			auto &lowLevelApi = reinterpret_cast<OGLLowLevelApi &>(Context::Instance().EngineInstance().LowLevelApiInstance());
 
 			uint32_t sample_count = settings._sample_count;
 			int requested_pixel_format = -1;
@@ -155,10 +163,163 @@ namespace Torch
 				assert(pixel_format != 0);
 
 				::SetPixelFormat(dc, pixel_format, &pfd);
+			
 
-				auto rc = gladLoadWGL(dc);
+				HGLRC rc = lowLevelApi.wglCreateContext(dc);
+				lowLevelApi.wglMakeCurrent(dc, rc);
+
+				gladLoadWGL(dc);
+
+				gladLoadGL();
+
+				auto color_format = settings._color_format;
+				if(color_format == EF_A2BGR10)
+				{
+					color_format = EF_ABGR16;
+				}
+
+				int r_bits;
+				int g_bits;
+				int b_bits;
+				int a_bits;
+
+				switch (color_format)
+				{
+				case EF_ARGB8:
+				case EF_ABGR8:
+					r_bits = 8;
+					g_bits = 8;
+					b_bits = 8;
+					a_bits = 8;
+					break;
+
+				case EF_A2BGR10:
+					r_bits = 10;
+					g_bits = 10;
+					b_bits = 10;
+					a_bits = 2;
+					break;
+
+				case EF_ABGR16F:
+					r_bits = 16;
+					g_bits = 16;
+					b_bits = 16;
+					a_bits = 16;
+					break;
+				default:
+
+					break;
+				}
+
+				int pf;
+				uint32_t num_formats;
+				float float_attrs[] = { 0, 0 };
+				BOOL valid;
+				do
+				{
+					std::vector<int> int_attrs =
+					{
+						WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+						WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+						WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
+						WGL_RED_BITS_ARB, r_bits,
+						WGL_GREEN_BITS_ARB, g_bits,
+						WGL_BLUE_BITS_ARB, b_bits,
+						WGL_ALPHA_BITS_ARB, a_bits,
+						WGL_DEPTH_BITS_ARB, static_cast<int>(depth_bits),
+						WGL_STENCIL_BITS_ARB, static_cast<int>(stencil_bits),
+						WGL_DOUBLE_BUFFER_ARB, GL_TRUE
+					};
 
 
+					if (IsFloatFormat(color_format))
+					{
+						int_attrs.push_back(WGL_PIXEL_TYPE_ARB);
+						int_attrs.push_back(WGL_TYPE_RGBA_FLOAT_ARB);
+					}
+					if(sample_count > 1)
+					{
+						int_attrs.push_back(WGL_SAMPLE_BUFFERS_ARB);
+						int_attrs.push_back(GL_TRUE);
+						int_attrs.push_back(WGL_SAMPLES_ARB);
+						int_attrs.push_back(static_cast<int>(sample_count));
+					}
+					if(settings._stereo_method == STM_LCDShutter)
+					{
+						int_attrs.push_back(WGL_STEREO_ARB);
+						int_attrs.push_back(GL_TRUE);
+					}
+					int_attrs.push_back(0);
+					int_attrs.push_back(0);
+
+					valid = glad_wglChoosePixelFormatARB(dc, &int_attrs[0], float_attrs, 1, &pf, &num_formats);
+					
+					if(valid && (num_formats > 0))
+					{
+						break;
+					}
+					else
+					{
+						--sample_count;
+					}
+
+				} while (sample_count > 0);
+
+				if(valid && (sample_count > 0))
+				{
+					requested_pixel_format = pf;
+					requested_pfd = pfd;
+
+					lowLevelApi.wglMakeCurrent(dc, nullptr);
+					lowLevelApi.wglDeleteContext(rc);
+					::ReleaseDC(wnd, dc);
+					::DestroyWindow(wnd);
+				}
+			}
+
+			::SetPixelFormat(_hDC, requested_pixel_format, &requested_pfd);
+			_hRC = lowLevelApi.wglCreateContext(_hDC);
+			lowLevelApi.wglMakeCurrent(_hDC, _hRC);
+
+			if(GLAD_WGL_ARB_create_context)
+			{
+				int flags = 0;
+#ifdef TORCH_DEBUG
+				bool const debug_context = true;
+#endif
+
+				if(debug_context)
+				{
+					flags |= WGL_CONTEXT_DEBUG_BIT_ARB;
+				}
+
+				int attrs[] =
+				{
+					WGL_CONTEXT_MAJOR_VERSION_ARB, 0,
+					WGL_CONTEXT_MINOR_VERSION_ARB, 0,
+					WGL_CONTEXT_FLAGS_ARB, flags,
+					WGL_CONTEXT_PROFILE_MASK_ARB,
+					WGL_CONTEXT_CORE_PROFILE_BIT_ARB, 0
+				};
+
+				for(size_t i = 0; i < available_versions.size(); ++i)
+				{
+					attrs[1] = available_versions[i].first;
+					attrs[3] = available_versions[i].second;
+					HGLRC hrc_new = glad_wglCreateContextAttribsARB(_hDC, nullptr, attrs);
+					if(hrc_new != nullptr)
+					{
+						lowLevelApi.wglMakeCurrent(_hDC, nullptr);
+						lowLevelApi.wglDeleteContext(_hRC);
+						_hRC = hrc_new;
+
+						lowLevelApi.wglMakeCurrent(_hDC, _hRC);
+
+						gladLoadGL();
+						break;
+					}
+
+				}
 			}
 
 		}

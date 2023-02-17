@@ -1,4 +1,4 @@
-#include <Torch/Torch.hpp>
+﻿#include <Torch/Torch.hpp>
 #include <TML/Util.hpp>
 #include <Torch/Interfaces/Context.hpp>
 #include <Torch/Interfaces/Window.hpp>
@@ -41,6 +41,8 @@ namespace Torch
     {
         auto cfg = Context::Instance().getConfig();
         Context::Instance().EngineInstance().LowLevelApiInstance();
+        cfg._graphics_cfg._color_format = EF_ARGB8;
+        cfg._graphics_cfg._stereo_method = STM_LCDShutter;
         Context::Instance().EngineInstance().CreateRenderWindow(_name, cfg._graphics_cfg);
         Context::Instance().setConfig(cfg);
     }

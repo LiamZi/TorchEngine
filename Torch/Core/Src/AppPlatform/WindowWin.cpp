@@ -45,7 +45,7 @@ namespace Torch
 				if (S_OK == DynamicGetDpiForMonitor(mon, MDT_DEFAULT, &dpi_x, &dpi_y))
 				{
 					Window* win = reinterpret_cast<Window *>(lparam);
-					win->UpdateDpiScale(max(win->_dpi_scale, static_cast<float>(max(dpi_x, dpi_y)) / USER_DEFAULT_SCREEN_DPI));
+					win->UpdateDpiScale(std::max(win->_dpi_scale, static_cast<float>(std::max(dpi_x, dpi_y)) / USER_DEFAULT_SCREEN_DPI));
 				}
 			}
 
