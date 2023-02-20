@@ -18,6 +18,7 @@ set(RENDERER_SOURCE_FILES
     ${TORCH_PROJECT_DIR}/Core/Src/Renderer/Canvas.cpp
     ${TORCH_PROJECT_DIR}/Core/Src/Renderer/Viewport.cpp
     ${TORCH_PROJECT_DIR}/Core/Src/Renderer/LowLevelApi.cpp
+    ${TORCH_PROJECT_DIR}/Core/Src/Renderer/DeviceFeature.cpp
 )
 
 set(RENDERER_HEADER_FILES
@@ -27,6 +28,7 @@ set(RENDERER_HEADER_FILES
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Renderer/Canvas.hpp
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Renderer/Viewport.hpp
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Interfaces/LowLevelApi.hpp
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Renderer/DeviceFeature.hpp
 )
 
 SOURCE_GROUP("Renderer\\Source Files" FILES ${RENDERER_SOURCE_FILES})

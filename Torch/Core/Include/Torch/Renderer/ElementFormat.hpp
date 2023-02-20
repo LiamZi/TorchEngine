@@ -1,4 +1,4 @@
-#ifndef __TORCH_CORE_INCLUDE_TORCH_ELEMENT_FORMAT_HPP__
+﻿#ifndef __TORCH_CORE_INCLUDE_TORCH_ELEMENT_FORMAT_HPP__
 #define __TORCH_CORE_INCLUDE_TORCH_ELEMENT_FORMAT_HPP__
 
 #pragma once
@@ -539,6 +539,17 @@ template <uint64_t ch0, uint64_t ch1, uint64_t ch2,
 
 		return format;
 	}
+
+	inline uint8_t NumDepthBits(ElementFormat format)
+    {
+	    if(EC_D == Channel<0>(format))
+	    {
+			return ChannelBits<0>(format);
+	    }
+
+		return 0;
+	
+    }
 
     inline uint8_t NumStencilBits(ElementFormat format)
 	{

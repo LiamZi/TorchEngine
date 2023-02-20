@@ -1,15 +1,18 @@
 ﻿#include <Torch/Torch.hpp>
 #include <Torch/Interfaces/Context.hpp>
+#include <Torch/Renderer/Viewport.hpp>
 
-#include <OpenGL/OGLRenderEngine.hpp>
 #include <OpenGL/OGLFrameBuffer.hpp>
-#include <glad.h>
+
 
 
 namespace Torch
 {
 	OGLFrameBuffer::OGLFrameBuffer(bool offScreen)
+		: View_port(this, &OGLFrameBuffer::_getViewport)
 	{
+		_viewport = MakeSharedPtr<Viewport>(0, 0, 0, 0);
+
 		if(offScreen)
 		{
 			//glad_glCreateFramebuffers(1, &_fbo);
@@ -28,5 +31,10 @@ namespace Torch
 	{
 		static std::wstring const desc(L"OpenGL Frame Buffer Object");
 		return desc;
+	}
+
+	ViewportPtr& OGLFrameBuffer::_getViewport()
+	{
+		return _viewport;
 	}
 };

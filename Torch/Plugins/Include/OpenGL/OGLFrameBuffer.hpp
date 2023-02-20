@@ -7,13 +7,24 @@
 
 namespace Torch
 {
+	FWD_CLASS_SPTR(Viewport);
+
 	class OGLFrameBuffer : public Canvas
 	{
+	protected:
+		ViewportPtr _viewport;
+
 	public:
 		explicit OGLFrameBuffer(bool offScreen);
 		~OGLFrameBuffer() override;
 
 		std::wstring const& Description() const override;
+
+	public:
+		ReadOnlyProperty<OGLFrameBuffer, ViewportPtr> View_port;
+
+	private:
+		ViewportPtr &_getViewport();
 
 	};
 };

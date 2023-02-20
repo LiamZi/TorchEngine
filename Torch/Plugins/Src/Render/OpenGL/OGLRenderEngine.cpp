@@ -48,6 +48,15 @@ namespace Torch
     {
         return MakeUniquePtr<OGLLowLevelApi>();
     }
+
+    void OGLRenderEngine::SetRenderDeivceFeatures()
+    {
+    }
+
+
+    void OGLRenderEngine::InitRenderStates()
+    {
+    }
 };
 
 extern "C"
