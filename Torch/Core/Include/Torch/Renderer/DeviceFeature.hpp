@@ -9,6 +9,12 @@
 
 namespace Torch
 {
+	enum TessellationType
+	{
+		TT_HARDWARE,
+		TT_NO,
+	};
+
 	struct DeviceFeature
 	{
 		uint32_t _max_texture_width;
@@ -17,6 +23,7 @@ namespace Torch
 		uint32_t _max_texture_cube_size;
 		uint32_t _max_texture_array_length;
 		uint32_t _max_vertex_texture_units;
+		uint32_t _max_pixel_texture_units;
 		uint32_t _max_geometry_texture_units;
 		uint32_t _max_simultaneous_rts;
 		uint32_t _max_simultaneous_uavs;
@@ -35,7 +42,9 @@ namespace Torch
 		bool _fp_color_support : true;
 		bool _pack_to_rgba_required : true;
 		bool _draw_indirect_support : true;
+		bool _no_overwrite_support : true;
 		bool _full_npot_texture_support : true;
+		bool _render_to_texture_array_support : true;
 		bool _explicit_multi_sample_support : true;
 		bool _load_from_buffer_support : true;
 		bool _uavs_at_every_stage_support : true;
@@ -48,7 +57,7 @@ namespace Torch
 		bool _hs_support : true;
 		bool _ds_support : true;
 
-
+		TessellationType _tessType;
 
 
 	};

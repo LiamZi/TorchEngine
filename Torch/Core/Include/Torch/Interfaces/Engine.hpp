@@ -9,6 +9,7 @@
 #include <vector>
 
 #include <Torch/Interfaces/LowLevelApi.hpp>
+#include <Torch/Renderer/DeviceFeature.hpp>
 
 namespace Torch
 {
@@ -29,6 +30,7 @@ namespace Torch
 
     protected:
         std::unique_ptr<LowLevelApi> _low_level_api;
+        DeviceFeature _deviceFeature;
 
     public:
         virtual ~Engine() noexcept;
@@ -40,6 +42,9 @@ namespace Torch
 
         EngineType GetEngineType() const;
 
+    public:
+        ReadOnlyProperty<Engine, DeviceFeature> Device_Feature;
+
     protected:
         Engine();
 
@@ -47,6 +52,7 @@ namespace Torch
         virtual std::wstring &_Name() = 0;
         virtual void _CreateRenderWindow(std::string const& name, RenderSettings const& settings) = 0;
         virtual std::unique_ptr<LowLevelApi> DoCreateLowLevelApi() = 0;
+        DeviceFeature& _getDeviceFeature();
     };
 };
 

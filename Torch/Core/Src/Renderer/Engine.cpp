@@ -14,9 +14,15 @@
 namespace Torch
 {
 
-    Torch::Engine::Engine()
+    Engine::Engine()
         : _type{EngineType::ET_NONE}
+		, Device_Feature{this, &Engine::_getDeviceFeature}
     {
+    }
+
+    DeviceFeature& Engine::_getDeviceFeature()
+    {
+        return _deviceFeature;
     }
 
     Engine::EngineType Engine::GetEngineType() const
