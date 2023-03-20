@@ -1,5 +1,6 @@
 #include <TML/TML.hpp>
 #include <TML/Log.hpp>
+#include <TML/StreamBuffer.hpp>
 
 #include <cstdarg>
 #include <cstdio>
@@ -16,27 +17,31 @@
 namespace
 {
     using namespace Torch;
-    class MultiOStreamCallback 
-    {
+	class MultiOStreamsCallback
+	{
     private:
-        std::span<std::ostream *> _oss;
+		std::span<std::ostream*> _oss;
+	public:
+		explicit MultiOStreamsCallback(std::span<std::ostream*> oss)
+			: _oss(oss)
+		{
+		}
+		MultiOStreamsCallback(MultiOStreamsCallback&& rhs) noexcept
+			: _oss(std::move(rhs._oss))
+		{
+		}
 
-    protected:
-        MultiOStreamCallback() = default;
-        ~MultiOStreamCallback() = default;
+		std::streambuf::int_type operator()(void const * buff, std::streamsize count)
+		{
+			for (auto& os : _oss)
+			{
+				os->write(static_cast<char const *>(buff), count);
+			}
+			return static_cast<std::streambuf::int_type>(count);
+		}
+	};
 
-    public:
-        explicit MultiOStreamCallback(std::span<std::ostream *> oss)
-        : _oss(oss)
-        {
-
-        }
-        MultiOStreamCallback(const MultiOStreamCallback &) = delete;
-        void operator=(const MultiOStreamCallback &) = delete;
-
-    };
-
-    std::ostream Log()
+    std::ostream &Log()
     {
 #ifdef TORCH_DEBUG
         static std::ofstream log_file("Torch.log");
@@ -49,8 +54,35 @@ namespace
             &std::clog
         };
 
-        // static CallbackOutputSteramBuf<MultiOStreamCallback> log_stream_buff
-        // static std::ostream log_stream("log");
-        // return log_stream;
+        static CallbackOutputStreamBuffer<MultiOStreamsCallback> log_stream_buff((MultiOStreamsCallback(oss)));
+        static std::ostream log_stream(&log_stream_buff);
+
+        return log_stream;
     }
 };
+
+
+namespace Torch
+{
+    std::ostream &LogDebug()
+    {
+        return Log() << "[Debug] Torch: ";
+    }
+
+    std::ostream &LogInfo()
+    {
+        return Log() << "[INFO] Torch: ";
+    }
+
+    std::ostream &LogWarn()
+    {
+        return Log() << "[WARN] Torch: ";
+    }
+
+    std::ostream &LogError()
+    {
+        return Log() << "[ERROR] Torch: ";
+    }
+    
+}; 
+

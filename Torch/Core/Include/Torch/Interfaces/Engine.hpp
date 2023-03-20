@@ -31,6 +31,7 @@ namespace Torch
     protected:
         std::unique_ptr<LowLevelApi> _low_level_api;
         DeviceFeature _deviceFeature;
+        std::string_view _shader_platform_name;
 
     public:
         virtual ~Engine() noexcept;

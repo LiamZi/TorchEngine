@@ -25,6 +25,8 @@ namespace Torch
 
 		virtual void Present();
 		virtual void WaitOnPresent();
+
+		void Attach();
 	};
 };
 
