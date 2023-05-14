@@ -7,4 +7,4 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${GLM_OUTPUT_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELWITHDEBINFO ${GLM_OUTPUT_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_MINSIZEREL ${GLM_OUTPUT_DIR})
 
-UpdateExternalLib("ImGUI" "https://github.com/ocornut/imgui.git" "696a53353273f7dfb16a14612b3554660abe94ec" "" "" need_patch)
+UpdateExternalLib("ImGUI" "https://github.com/ocornut/imgui.git" "5a2b1e84828f192d30c91cdd210db41de8ad3236" "" "" need_patch)

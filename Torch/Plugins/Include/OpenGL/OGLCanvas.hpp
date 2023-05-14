@@ -39,6 +39,8 @@ namespace Torch
 		std::wstring const &Description() const override;
 
 		void Resize(uint32_t width, uint32_t height);
+		void Repostion(uint32_t left, uint32_t top);
+		void WindowMovedOrResized(const Window &win);
 		
 	public:
 		Property<OGLCanvas, bool> FullScreen;

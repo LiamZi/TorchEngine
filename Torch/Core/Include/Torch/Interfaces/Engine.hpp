@@ -40,6 +40,7 @@ namespace Torch
     public:
         void CreateRenderWindow(std::string const &name, RenderSettings &settings);
         void DestroyRenderWindow();
+        void Resize(uint32_t width, uint32_t height);
 
         EngineType GetEngineType() const;
 

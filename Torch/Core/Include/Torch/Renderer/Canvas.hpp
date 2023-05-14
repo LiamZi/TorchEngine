@@ -11,6 +11,24 @@ namespace Torch
 	class TORCH_CORE_API Canvas
 	{
 	public:
+		enum class BindType
+		{
+			Color0 = 0,
+			Color1,
+			Color2,
+			Color3,
+			Color4,
+			Color5,
+			Color6,
+			Color7
+		};
+
+	protected:
+		uint32_t _left;
+		uint32_t _top;
+		uint32_t _width;
+		uint32_t _height;
+
 
 	public:
 		Canvas();
@@ -26,7 +44,7 @@ namespace Torch
 		virtual void Present();
 		virtual void WaitOnPresent();
 
-		void Attach();
+		void Bind();
 	};
 };
 

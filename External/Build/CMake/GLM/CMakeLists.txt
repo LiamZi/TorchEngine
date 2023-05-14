@@ -7,7 +7,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${GLM_OUTPUT_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELWITHDEBINFO ${GLM_OUTPUT_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_MINSIZEREL ${GLM_OUTPUT_DIR})
 
-UpdateExternalLib("GLM" "https://github.com/g-truc/glm.git" "1c18fca7890112e7ae15a600e35f850217f3674f" "" "" need_patch)
+UpdateExternalLib("GLM" "https://github.com/g-truc/glm.git" "97e09aa3047844991fe5c9625cae9a072a8ed03a" "" "" need_patch)
 
 # set(BUILD_SHARED_LIBS TRUE)
 

@@ -15,6 +15,7 @@
 #include <OpenGL/OGLLowLevelApi.hpp>
 
 #include "Torch/Renderer/Viewport.hpp"
+#include "OGLCanvas.hpp"
 
 
 namespace Torch
@@ -363,14 +364,43 @@ namespace Torch
 		}
 	}
 
-    OGLCanvas::~OGLCanvas() = default;
+    OGLCanvas::~OGLCanvas()
+	{
+		this->Destroy();
+	}
 
 	void OGLCanvas::Destroy()
 	{
+#if defined TORCH_PLATFORM_WINDOWS
+		if(_hWnd != nullptr)
+		{
+			if(_hDC != nullptr)
+			{
+				auto &low_level_api = reinterpret_cast<OGLLowLevelApi &>(Context::Instance().EngineInstance().LowLevelApiInstance());
+				low_level_api.wglCreateContext(_hRC, nullptr);
+				if(_hRC != nullptr)
+				{
+					low_level_api.wglDeleteContext(_hRC);
+					_hRC = nullptr;
+				}
+				::ReleaseDC(_hWnd, _hDC);
+				_hDC = nullptr;
+			}
+
+			if(_is_full_screen)
+			{
+				::ChangeDisplaySettings(nullptr, 0);
+				ShowCursor(TRUE);
+			}
+		}
+#endif
 	}
 
 	void OGLCanvas::Present()
 	{
+#if defined TORCH_PLATFORM_WINDOWS
+		::SwapBuffers(_hDC);
+#endif
 	}
 
 	std::wstring const& OGLCanvas::Description() const
@@ -380,14 +410,61 @@ namespace Torch
 
     void OGLCanvas::Resize(uint32_t width, uint32_t height)
     {
+		_width = width;
+		_height = height;
+
+		_viewport->Width = width;
+		_viewport->Height = height;
     }
 
-	void OGLCanvas::_OnExitSize(WindowPtr const& win)
-	{
+    void OGLCanvas::Repostion(uint32_t left, uint32_t top)
+    {
+		_left = left;
+		_top = top;
+    }
+
+    void OGLCanvas::WindowMovedOrResized(const Window &win)
+    {
+		float const dpi_scale = win.DPI;
+
+#if defined TORCH_PLATFORM_WINDOWS
+		::RECT rect;
+		::GetClientRect(_hWnd, &rect);
+
+		uint32_t new_left = rect.left;
+		uint32_t new_top = rect.top;
+
+		if((new_left != _left) || (new_top != _top))
+		{
+			Reposition(new_left, new_top);
+		}
+
+		uint32_t new_width = rect.right - rect.left;
+		uint32_t new_height = rect.bottom - rect.top;
+#endif
+
+		if((new_width != _width) || (new_height != _height))
+		{
+			Context::Instance().EngineInstance().
+		}
+
+    }
+
+
+    void OGLCanvas::_OnExitSize(WindowPtr const &win)
+    {
+		WindowMovedOrResized(win);
 	}
 
 	void OGLCanvas::_OnSize(WindowPtr const& win, EventState &state)
 	{
+		if(state)
+		{
+			if(win->Ready)
+			{
+				WindowMovedOrResized(win);
+			}
+		}
 	}
 
 	void OGLCanvas::_setFullScreen(const bool full)

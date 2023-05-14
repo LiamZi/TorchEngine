@@ -193,6 +193,8 @@ namespace Torch
             }
         }
 
+        win->Attach()
+
         
     }
 
@@ -282,7 +284,7 @@ namespace Torch
     }
 
 
-    void OGLRenderEngine::InitRenderStates()
+    void OGLRenderEngine::InitPipelineStates()
     {
     }
 };
