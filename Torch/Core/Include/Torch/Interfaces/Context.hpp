@@ -68,7 +68,7 @@ namespace Torch
         void setConfig(const ContextCfg &cfg);
         ContextCfg &getConfig();
 
-        Engine &EngineInstance();
+        Engine &Engine();
         bool LowLevelApiValid() const;
         bool EngineValid() const;
 

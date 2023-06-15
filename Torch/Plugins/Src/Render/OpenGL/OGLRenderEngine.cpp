@@ -157,13 +157,25 @@ namespace Torch
         {
             _shader_platform_name = "gl_4_5";
         }
+        else if(GLAD_GL_VERSION_4_4)
+        {
+            _shader_platform_name = "gl_4_4";
+        }
+        else if(GLAD_GL_VERSION_4_4)
+        {
+            _shader_platform_name = "gl_4_3";
+        }
+        else if(GLAD_GL_VERSION_4_2)
+        {
+            _shader_platform_name = "gl_4_2";
+        }
         else
         {
-            _shader_platform_name = "gl_3_3";
+            _shader_platform_name = "gl_4_1";
         }
 
         this->SetRenderDeivceFeatures();
-        this->InitRenderStates();
+        this->InitPipelineStates();
 
 #ifdef TORCH_DEBUG
         bool const debug_context = true;
@@ -193,7 +205,7 @@ namespace Torch
             }
         }
 
-        win->Attach()
+        // win->Attach()
 
         
     }
@@ -286,6 +298,7 @@ namespace Torch
 
     void OGLRenderEngine::InitPipelineStates()
     {
+        auto &engine = Context::Instance().Engine().LowLevelApiInstance();
     }
 };
 

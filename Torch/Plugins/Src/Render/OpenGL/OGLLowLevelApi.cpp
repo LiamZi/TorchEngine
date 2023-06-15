@@ -1,5 +1,5 @@
 ﻿#include <OpenGL/OGLLowLevelApi.hpp>
-
+#include <OpenGL/OGLRasterizerState.hpp>
 
 namespace Torch
 {   
@@ -35,6 +35,11 @@ namespace Torch
 	{
 		return _dynamic_wgl_make_current(hdc, hglrc);
 	}
+
+	RasterizerStatePtr OGLLowLevelApi::_CreateRasterizerState(const RasterizerDesc &rdesc, const DepthStencilDesc &ddesc, const BlendDesc &bdesc)
+    {
+        return MakeSharedPtr<OGLRasterizerState>(rdesc, ddesc, bdesc);
+    }
 };
 
 

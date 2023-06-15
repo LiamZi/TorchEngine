@@ -32,6 +32,10 @@ namespace Torch
 
         std::wstring const & Name() const override;
 
+    private:
+        RasterizerStatePtr _CreateRasterizerState(const RasterizerDesc &rdesc, const DepthStencilDesc &ddesc, const BlendDesc &bdesc) override;
+
+    public:
 #if defined TORCH_PLATFORM_WINDOWS
         HGLRC wglCreateContext(HDC hdc);
         BOOL wglDeleteContext(HGLRC hglrc);

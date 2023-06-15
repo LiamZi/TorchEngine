@@ -10,12 +10,11 @@
 #include <OpenGL/OGLRenderEngine.hpp>
 #include <OpenGL/OGLCanvas.hpp>
 #include <Torch/Interfaces/Context.hpp>
-
 #include <Torch/Interfaces/App3DFramework.hpp>
 #include <OpenGL/OGLLowLevelApi.hpp>
 
-#include "Torch/Renderer/Viewport.hpp"
-#include "OGLCanvas.hpp"
+#include <Torch/Renderer/Viewport.hpp>
+
 
 
 namespace Torch
@@ -126,7 +125,7 @@ namespace Torch
 		::SetWindowLongPtrW(_hWnd, GWL_STYLE, style);
 		::SetWindowPos(_hWnd, nullptr, settings._left, settings._top, rect.right - rect.left, rect.bottom - rect.top, SWP_SHOWWINDOW | SWP_NOZORDER);
 
-		auto &lowLevelApi = reinterpret_cast<OGLLowLevelApi &>(Context::Instance().EngineInstance().LowLevelApiInstance());
+		auto &lowLevelApi = reinterpret_cast<OGLLowLevelApi &>(Context::Instance().Engine().LowLevelApiInstance());
 
 		uint32_t sample_count = settings._sample_count;
 		int requested_pixel_format = -1;
@@ -376,8 +375,8 @@ namespace Torch
 		{
 			if(_hDC != nullptr)
 			{
-				auto &low_level_api = reinterpret_cast<OGLLowLevelApi &>(Context::Instance().EngineInstance().LowLevelApiInstance());
-				low_level_api.wglCreateContext(_hRC, nullptr);
+				auto &low_level_api = reinterpret_cast<OGLLowLevelApi &>(Context::Instance().Engine().LowLevelApiInstance());
+				low_level_api.wglMakeCurrent(_hDC, nullptr);
 				if(_hRC != nullptr)
 				{
 					low_level_api.wglDeleteContext(_hRC);
@@ -417,15 +416,15 @@ namespace Torch
 		_viewport->Height = height;
     }
 
-    void OGLCanvas::Repostion(uint32_t left, uint32_t top)
+    void OGLCanvas::Reposition(uint32_t left, uint32_t top)
     {
 		_left = left;
 		_top = top;
     }
 
-    void OGLCanvas::WindowMovedOrResized(const Window &win)
+    void OGLCanvas::WindowMovedOrResized(const WindowPtr  &win)
     {
-		float const dpi_scale = win.DPI;
+		float const dpi_scale = win->DPI;
 
 #if defined TORCH_PLATFORM_WINDOWS
 		::RECT rect;
@@ -445,20 +444,21 @@ namespace Torch
 
 		if((new_width != _width) || (new_height != _height))
 		{
-			Context::Instance().EngineInstance().
+			auto width = static_cast<uint32_t>(new_width / dpi_scale + 0.5f);
+			auto height = static_cast<uint32_t>(new_height / dpi_scale + 0.5);
+			Context::Instance().Engine().Resize(width, height);
 		}
-
     }
 
 
     void OGLCanvas::_OnExitSize(WindowPtr const &win)
     {
-		WindowMovedOrResized(win);
+		this->WindowMovedOrResized(win);
 	}
 
 	void OGLCanvas::_OnSize(WindowPtr const& win, EventState &state)
 	{
-		if(state)
+		if(state._target)
 		{
 			if(win->Ready)
 			{

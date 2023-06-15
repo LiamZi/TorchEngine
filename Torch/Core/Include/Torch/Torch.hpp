@@ -24,5 +24,6 @@
 #include <vector>
 #include <string>
 #include <Torch/Interfaces/Context.hpp>
+#include <glad.h>
 
 #endif

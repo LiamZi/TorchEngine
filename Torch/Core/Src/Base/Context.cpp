@@ -131,7 +131,7 @@ namespace Torch
         return _cfg;
     }
 
-    Engine &Context::EngineInstance()
+    Engine &Context::Engine()
     {
         if(!_render_engine)
         {

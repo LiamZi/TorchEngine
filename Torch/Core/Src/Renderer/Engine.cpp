@@ -9,7 +9,6 @@
 #include <mutex>
 #include <string>
 #include <Torch/Interfaces/Engine.hpp>
-#include "Engine.hpp"
 
 
 namespace Torch
@@ -55,6 +54,6 @@ namespace Torch
 
     void Torch::Engine::Resize(uint32_t width, uint32_t height)
     {
-        uint32_t const old_screen_width = _defau
+        // uint32_t const old_screen_width = 
     }
 };

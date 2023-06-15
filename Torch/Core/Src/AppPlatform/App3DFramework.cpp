@@ -40,11 +40,11 @@ namespace Torch
     void App3DFramework::Create()
     {
         auto cfg = Context::Instance().getConfig();
-        Context::Instance().EngineInstance().LowLevelApiInstance();
+        Context::Instance().Engine().LowLevelApiInstance();
         cfg._graphics_cfg._color_format = EF_ARGB8;
         cfg._graphics_cfg._stereo_method = STM_None;
         cfg._graphics_cfg._depth_stencil_format = EF_D24S8;
-        Context::Instance().EngineInstance().CreateRenderWindow(_name, cfg._graphics_cfg);
+        Context::Instance().Engine().CreateRenderWindow(_name, cfg._graphics_cfg);
         Context::Instance().setConfig(cfg);
     }
 

@@ -27,6 +27,8 @@ set(BASE_HEADER_FILES
 	${TML_PROJECT_DIR}/include/TML/Random.hpp
 	${TML_PROJECT_DIR}/include/TML/Hash.hpp
 	${TML_PROJECT_DIR}/include/TML/StreamBuffer.hpp
+	${TML_PROJECT_DIR}/include/TML/Color3.hpp
+	${TML_PROJECT_DIR}/include/TML/Color4.hpp
 )
 
 set(BASE_SOURCE_FILES
@@ -38,7 +40,8 @@ set(BASE_SOURCE_FILES
 	${TML_PROJECT_DIR}/src/ResIdentifier.cpp
 	${TML_PROJECT_DIR}/src/Guid.cpp
 	${TML_PROJECT_DIR}/src/StreamBuffer.cpp
-
+	${TML_PROJECT_DIR}/src/Color3.cpp
+	${TML_PROJECT_DIR}/src/Color4.cpp
 )
 
 SOURCE_GROUP("Base\\Source Files" FILES ${BASE_SOURCE_FILES})

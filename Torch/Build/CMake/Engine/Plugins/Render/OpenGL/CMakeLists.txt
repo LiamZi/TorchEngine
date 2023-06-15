@@ -9,6 +9,7 @@ set(OPENGL_SOURCE_FILES
     ${TORCH_PROJECT_DIR}/Plugins/Src/Render/OpenGL/OGLFrameBuffer.cpp
     ${TORCH_PROJECT_DIR}/Plugins/Src/Render/OpenGL/OGLCanvas.cpp
     ${TORCH_PROJECT_DIR}/Plugins/Src/Render/OpenGL/OGLLowLevelApi.cpp
+    ${TORCH_PROJECT_DIR}/Plugins/Src/Render/OpenGL/OGLRasterizerState.cpp
 )
 
 set(OPENGL_HEADER_FILES
@@ -16,6 +17,7 @@ set(OPENGL_HEADER_FILES
     ${TORCH_PROJECT_DIR}/Plugins/Include/OpenGL/OGLFrameBuffer.hpp
     ${TORCH_PROJECT_DIR}/Plugins/Include/OpenGL/OGLCanvas.hpp
     ${TORCH_PROJECT_DIR}/Plugins/Include/OpenGL/OGLLowLevelApi.hpp
+    ${TORCH_PROJECT_DIR}/Plugins/Include/OpenGL/OGLRasterizerState.hpp
 )
 
 source_group("Source FIles" FILES ${OPENGL_SOURCE_FILES})
@@ -29,7 +31,7 @@ target_include_directories(${LIB_NAME}
 )
 
 message("RENDER OGL : ${TORCH_OUTPUT_SUFFIX}")
-message("RENDER OGL PROJECT_LABEL ${PROJECT_LABEL}")
+message("RENDER OGL PROJECT_LABEL ${LIB_NAME}")
 
 set_target_properties(${LIB_NAME} PROPERTIES
     PROJECT_LABEL ${LIB_NAME}

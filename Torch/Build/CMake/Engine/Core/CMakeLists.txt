@@ -19,6 +19,7 @@ set(RENDERER_SOURCE_FILES
     ${TORCH_PROJECT_DIR}/Core/Src/Renderer/Viewport.cpp
     ${TORCH_PROJECT_DIR}/Core/Src/Renderer/LowLevelApi.cpp
     ${TORCH_PROJECT_DIR}/Core/Src/Renderer/DeviceFeature.cpp
+    ${TORCH_PROJECT_DIR}/Core/Src/Renderer/RasterizerState.cpp
 )
 
 set(RENDERER_HEADER_FILES
@@ -29,6 +30,7 @@ set(RENDERER_HEADER_FILES
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Renderer/Viewport.hpp
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Interfaces/LowLevelApi.hpp
     ${TORCH_PROJECT_DIR}/Core/Include/Torch/Renderer/DeviceFeature.hpp
+    ${TORCH_PROJECT_DIR}/Core/Include/Torch/Renderer/RasterizerState.hpp
 )
 
 SOURCE_GROUP("Renderer\\Source Files" FILES ${RENDERER_SOURCE_FILES})

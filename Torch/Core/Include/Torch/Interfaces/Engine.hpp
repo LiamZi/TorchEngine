@@ -13,6 +13,9 @@
 
 namespace Torch
 {
+    FWD_CLASS_SPTR(RasterizerState);
+    FWD_CLASS_SPTR(Canvas);
+
     class TORCH_CORE_API Engine
     {
     public:
@@ -32,6 +35,8 @@ namespace Torch
         std::unique_ptr<LowLevelApi> _low_level_api;
         DeviceFeature _deviceFeature;
         std::string_view _shader_platform_name;
+        RasterizerStatePtr _rasterizerState;
+        CanvasPtr _canvas[4];
 
     public:
         virtual ~Engine() noexcept;
