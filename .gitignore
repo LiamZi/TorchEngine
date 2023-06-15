@@ -25,5 +25,6 @@ Torch/Samples/lib/*
 Torch/bin
 /.vscode/*
 External/lib/*
+External/*
 
 Build/CMakeCache.txt
